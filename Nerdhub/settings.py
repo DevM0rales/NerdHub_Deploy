@@ -28,8 +28,8 @@ DJANGO_KEY = 'django-insecure-1dov81@qkgj1ikl!rea^=36fu(gj#9e=n6brqucif(i4m+xuu-
 DEBUG = True
 
 # NOTE: Add your domain names in production
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'nerdhubdeploy.up.railway.app']
 
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,nerdhubdeploy.up.railway.app").split(",")
 
 # Application definition
 
