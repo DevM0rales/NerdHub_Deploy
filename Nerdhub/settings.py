@@ -21,11 +21,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # NOTE: In production, this should be set as an environment variable
-DJANGO_KEY = 'django-insecure-1dov81@qkgj1ikl!rea^=36fu(gj#9e=n6brqucif(i4m+xuu-'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-secret-key-123")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # NOTE: Set to False in production
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "True") != "True"
 
 # NOTE: Add your domain names in production
 
