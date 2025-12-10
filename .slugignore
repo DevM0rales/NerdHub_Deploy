@@ -1,0 +1,5 @@
+# Files and directories to exclude from deployment
+*.md
+.gitignore
+DEPLOYMENT.md
+populate_data.py
