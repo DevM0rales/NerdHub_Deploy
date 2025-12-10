@@ -13,7 +13,8 @@ from django.contrib import messages
 from .models import Produto, Categoria, Marca, Carrinho, ItemCarrinho, Pedido, Review
 from usuarios.models import Endereco
 import json
-from django.views.decorators.http import require_POST, require_GET, require_http_methods, csrf_exempt
+from django.views.decorators.http import require_POST, require_GET, require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q, Avg
 from django.core.paginator import Paginator
 from django.http import HttpResponse
