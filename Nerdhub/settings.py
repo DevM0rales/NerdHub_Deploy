@@ -28,8 +28,11 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-secret-key-123")
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 # NOTE: Add your domain names in production
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,nerdhubdeploy.up.railway.app").split(",")
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://nerdhubdeploy.up.railway.app",
+]
 
 # Application definition
 
@@ -132,9 +135,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "nucleo" / "static",
-    BASE_DIR / "usuarios" / "static",
-    BASE_DIR / "products" / "static",
+    BASE_DIR / "nucleo" / "static"
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
