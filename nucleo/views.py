@@ -5,6 +5,7 @@ Este arquivo contém todas as views (controladores) do sistema,
 responsáveis por processar requisições e retornar respostas.
 """
 
+import os
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -764,3 +765,21 @@ def health_check(request):
         'message': 'NerdHub is running successfully!',
         'deployment': 'Railway'
     })
+
+
+def error_test(request):
+    """
+    Simple error test endpoint to check error handling
+    """
+    try:
+        # This will help us see if the app is running
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Error test endpoint working',
+            'environment': 'Railway' if os.environ.get('DATABASE_URL') else 'Local'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        })
