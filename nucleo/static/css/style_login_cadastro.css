@@ -1,0 +1,97 @@
+/* Estilos para páginas de Login e Cadastro */
+
+.login-cadastro-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    padding: 20px;
+}
+
+.login-cadastro-form {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-cadastro-form h2 {
+    margin-bottom: 30px;
+    color: #4dc9a7;
+    font-size: 28px;
+}
+
+.login-cadastro-form label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.login-cadastro-form input[type="text"],
+.login-cadastro-form input[type="email"],
+.login-cadastro-form input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #4dc9a7;
+    border-radius: 5px;
+    background-color: #111;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.login-cadastro-form input[type="text"]:focus,
+.login-cadastro-form input[type="email"]:focus,
+.login-cadastro-form input[type="password"]:focus {
+    outline: none;
+    border-color: #4dc9a7;
+    box-shadow: 0 0 5px #4dc9a7;
+}
+
+.login-cadastro-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4dc9a7;
+    color: #0c4133;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-cadastro-form button:hover {
+    background-color: #3bb08f;
+}
+
+.login-cadastro-form p {
+    margin-top: 20px;
+    color: #fff;
+}
+
+.login-cadastro-form a {
+    color: #4dc9a7;
+    text-decoration: none;
+}
+
+.login-cadastro-form a:hover {
+    text-decoration: underline;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .login-cadastro-container {
+        padding: 10px;
+    }
+
+    .login-cadastro-form {
+        padding: 20px;
+    }
+}

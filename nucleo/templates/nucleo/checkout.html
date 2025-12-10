@@ -1,0 +1,499 @@
+{% extends 'nucleo/base.html' %}
+
+{% block title %}Finalizar Pedido - NerdHub{% endblock %}
+
+{% block content %}
+{% load static %}
+<!-- Carregar CSS específico do checkout -->
+<link rel="stylesheet" href="{% static 'css/style_checkout.css' %}">
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="container">
+        <div class="checkout-layout">
+            <!-- Left Column: Checkout Form -->
+            <div class="checkout-left">
+                <!-- Formulário de checkout - POST para finalizar_pedido -->
+                <form method="post" action="{% url 'nucleo:finalizar_pedido' %}" class="checkout-form" id="checkout-form">
+                    {% csrf_token %} <!-- Token CSRF para segurança -->
+                    
+                    <!-- Endereço de Entrega -->
+                    <section class="checkout-section">
+                        <div class="checkout-section__header">
+                            <div class="checkout-section__icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <h2 class="checkout-section__title">Endereço de Entrega</h2>
+                        </div>
+                        
+                        <!-- Seletor de endereços salvos (se existirem) -->
+                        {% if enderecos_salvos %}
+                        <div class="address-options">
+                            {% for endereco in enderecos_salvos %}
+                            <div class="address-card {% if forloop.first %}selected{% endif %}" 
+                                 data-id="{{ endereco.id }}"
+                                 data-destinatario="{{ endereco.recipient_name }}"
+                                 data-rua="{{ endereco.street }}"
+                                 data-numero="{{ endereco.number }}"
+                                 data-complemento="{{ endereco.complement }}"
+                                 data-bairro="{{ endereco.neighborhood }}"
+                                 data-cidade="{{ endereco.city }}"
+                                 data-estado="{{ endereco.state }}"
+                                 data-cep="{{ endereco.postal_code }}"
+                                 data-telefone="{{ endereco.phone_at_address }}">
+                                {% if endereco.is_default_shipping %}
+                                <div class="address-card__badge">Principal</div>
+                                {% endif %}
+                                <div class="address-card__header">
+                                    <h3 class="address-card__name">{{ endereco.recipient_name }}</h3>
+                                    <span class="address-card__type">{{ endereco.label }}</span>
+                                </div>
+                                <div class="address-card__details">
+                                    {{ endereco.street }}, {{ endereco.number }}{% if endereco.complement %} - {{ endereco.complement }}{% endif %}<br>
+                                    {{ endereco.neighborhood }}<br>
+                                    {{ endereco.city }} - {{ endereco.state }}<br>
+                                    CEP: {{ endereco.postal_code }}
+                                </div>
+                                <p class="address-card__phone">
+                                    <i class="fas fa-phone"></i> {{ endereco.phone_at_address }}
+                                </p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="address-form">
+                            <!-- Campo: Nome do Destinatário -->
+                            <div class="form-group">
+                                <label for="endereco_destinatario" class="form-label">Nome do Destinatário *</label>
+                                <input type="text" id="endereco_destinatario" name="endereco_destinatario" 
+                                       class="form-input" required>
+                            </div>
+                            
+                            <!-- Campos: CEP e Telefone (lado a lado) -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="endereco_cep" class="form-label">CEP *</label>
+                                    <input type="text" id="endereco_cep" name="endereco_cep" 
+                                           class="form-input" maxlength="9" placeholder="00000-000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="endereco_telefone" class="form-label">Telefone *</label>
+                                    <input type="text" id="endereco_telefone" name="endereco_telefone" 
+                                           class="form-input" placeholder="(00) 00000-0000" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Campos: Rua e Número (lado a lado) -->
+                            <div class="form-row">
+                                <div class="form-group flex-grow">
+                                    <label for="endereco_rua" class="form-label">Rua *</label>
+                                    <input type="text" id="endereco_rua" name="endereco_rua" 
+                                           class="form-input" required>
+                                </div>
+                                <div class="form-group short">
+                                    <label for="endereco_numero" class="form-label">Número *</label>
+                                    <input type="text" id="endereco_numero" name="endereco_numero" 
+                                           class="form-input" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Campos: Complemento e Bairro (lado a lado) -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="endereco_complemento" class="form-label">Complemento</label>
+                                    <input type="text" id="endereco_complemento" name="endereco_complemento" 
+                                           class="form-input" placeholder="Apto, Bloco, etc.">
+                                </div>
+                                <div class="form-group">
+                                    <label for="endereco_bairro" class="form-label">Bairro *</label>
+                                    <input type="text" id="endereco_bairro" name="endereco_bairro" 
+                                           class="form-input" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Campos: Cidade e Estado (lado a lado) -->
+                            <div class="form-row">
+                                <div class="form-group flex-grow">
+                                    <label for="endereco_cidade" class="form-label">Cidade *</label>
+                                    <input type="text" id="endereco_cidade" name="endereco_cidade" 
+                                           class="form-input" required>
+                                </div>
+                                <div class="form-group short">
+                                    <label for="endereco_estado" class="form-label">Estado *</label>
+                                    <!-- Select com todos os 27 estados brasileiros -->
+                                    <select id="endereco_estado" name="endereco_estado" class="form-input" required>
+                                        <option value="">UF</option>
+                                        <option value="AC">AC</option>
+                                        <option value="AL">AL</option>
+                                        <option value="AP">AP</option>
+                                        <option value="AM">AM</option>
+                                        <option value="BA">BA</option>
+                                        <option value="CE">CE</option>
+                                        <option value="DF">DF</option>
+                                        <option value="ES">ES</option>
+                                        <option value="GO">GO</option>
+                                        <option value="MA">MA</option>
+                                        <option value="MT">MT</option>
+                                        <option value="MS">MS</option>
+                                        <option value="MG">MG</option>
+                                        <option value="PA">PA</option>
+                                        <option value="PB">PB</option>
+                                        <option value="PR">PR</option>
+                                        <option value="PE">PE</option>
+                                        <option value="PI">PI</option>
+                                        <option value="RJ">RJ</option>
+                                        <option value="RN">RN</option>
+                                        <option value="RS">RS</option>
+                                        <option value="RO">RO</option>
+                                        <option value="RR">RR</option>
+                                        <option value="SC">SC</option>
+                                        <option value="SP">SP</option>
+                                        <option value="SE">SE</option>
+                                        <option value="TO">TO</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Forma de Pagamento -->
+                    <section class="checkout-section">
+                        <div class="checkout-section__header">
+                            <div class="checkout-section__icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <h2 class="checkout-section__title">Forma de Pagamento</h2>
+                        </div>
+                        
+                        <div class="payment-methods">
+                            <div class="payment-method selected" data-method="credito">
+                                <div class="payment-method__icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="payment-method__info">
+                                    <h3 class="payment-method__name">Cartão de Crédito</h3>
+                                    <p class="payment-method__description">Pague com seu cartão de crédito</p>
+                                </div>
+                                <span class="payment-method__discount">12x sem juros</span>
+                            </div>
+                            
+                            <div class="payment-method" data-method="debito">
+                                <div class="payment-method__icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="payment-method__info">
+                                    <h3 class="payment-method__name">Cartão de Débito</h3>
+                                    <p class="payment-method__description">Pague com seu cartão de débito</p>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method" data-method="pix">
+                                <div class="payment-method__icon">
+                                    <i class="fas fa-qrcode"></i>
+                                </div>
+                                <div class="payment-method__info">
+                                    <h3 class="payment-method__name">PIX</h3>
+                                    <p class="payment-method__description">Pagamento instantâneo</p>
+                                </div>
+                                <span class="payment-method__discount">5% OFF</span>
+                            </div>
+                            
+                            <div class="payment-method" data-method="boleto">
+                                <div class="payment-method__icon">
+                                    <i class="fas fa-barcode"></i>
+                                </div>
+                                <div class="payment-method__info">
+                                    <h3 class="payment-method__name">Boleto Bancário</h3>
+                                    <p class="payment-method__description">Pagamento em até 3 dias úteis</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cartão de Crédito Details -->
+                        <div class="card-details active" id="credit-card-details">
+                            <div class="form-group">
+                                <label for="card-number" class="form-label">Número do Cartão</label>
+                                <input 
+                                    type="text" 
+                                    id="card-number" 
+                                    name="card_number"
+                                    class="form-input"
+                                    placeholder="0000 0000 0000 0000"
+                                    maxlength="19"
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="card-name" class="form-label">Nome no Cartão</label>
+                                <input 
+                                    type="text" 
+                                    id="card-name" 
+                                    name="card_name"
+                                    class="form-input"
+                                    placeholder="NOME COMPLETO"
+                                >
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="card-expiry" class="form-label">Validade</label>
+                                    <input 
+                                        type="text" 
+                                        id="card-expiry" 
+                                        name="card_expiry"
+                                        class="form-input"
+                                        placeholder="MM/AA"
+                                        maxlength="5"
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="card-cvv" class="form-label">CVV</label>
+                                    <input 
+                                        type="text" 
+                                        id="card-cvv" 
+                                        name="card_cvv"
+                                        class="form-input"
+                                        placeholder="123"
+                                        maxlength="3"
+                                    >
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="card-installments" class="form-label">Parcelas</label>
+                                <select id="card-installments" name="card_installments" class="form-input">
+                                    <option value="1">1x R$ {{ total|floatformat:2 }}</option>
+                                    <option value="2">2x R$ {{ total|divisibleby:2|yesno:"half,total"|floatformat:2 }}</option>
+                                    <option value="3">3x R$ {{ total|divisibleby:3|yesno:"third,total"|floatformat:2 }}</option>
+                                    <option value="4">4x R$ {{ total|divisibleby:4|yesno:"quarter,total"|floatformat:2 }}</option>
+                                    <option value="5">5x R$ {{ total|divisibleby:5|yesno:"fifth,total"|floatformat:2 }}</option>
+                                    <option value="6" selected>6x R$ {{ total|divisibleby:6|yesno:"sixth,total"|floatformat:2 }}</option>
+                                    <option value="12">12x R$ {{ total|divisibleby:12|yesno:"twelfth,total"|floatformat:2 }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Campos ocultos para forma de pagamento -->
+                        <input type="hidden" name="forma_pagamento" id="forma_pagamento" value="credito">
+                    </section>
+                    
+                    <!-- Botão de submit -->
+                    <div class="form-actions">
+                        <button type="submit" class="complete-order-btn">
+                            <i class="fas fa-lock"></i> Finalizar Compra
+                        </button>
+                        <a href="{% url 'nucleo:ver_carrinho' %}" class="btn btn--secondary">
+                            <i class="fas fa-arrow-left"></i> Voltar ao Carrinho
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Column: Order Summary -->
+            <aside class="order-summary">
+                <div class="summary-card">
+                    <h2 class="summary-card__title">Resumo do Pedido</h2>
+                    
+                    <div class="order-items">
+                        {% for item_com_total in itens_com_total %}
+                        <div class="order-item">
+                            <div class="order-item__image">
+                                {% if item_com_total.item.produto.imagem_principal %}
+                                <img src="{{ item_com_total.item.produto.imagem_principal.url }}" 
+                                     alt="{{ item_com_total.item.produto.nome }}">
+                                {% else %}
+                                <i class="fas fa-box"></i>
+                                {% endif %}
+                            </div>
+                            <div class="order-item__info">
+                                <h3 class="order-item__name">{{ item_com_total.item.produto.nome }}</h3>
+                                <p class="order-item__details">Quantidade: {{ item_com_total.item.quantidade }}</p>
+                            </div>
+                            <div class="order-item__price">R$ {{ item_com_total.total|floatformat:2 }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span>R$ {{ total|floatformat:2 }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Frete</span>
+                            <span class="text-success">Grátis</span>
+                        </div>
+                        <div class="summary-row discount" id="discount-row" style="display: none;">
+                            <span>Desconto (<span id="discount-type">PIX</span>)</span>
+                            <span id="discount-amount">- R$ 0,00</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span class="total-price">R$ {{ total|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-note">
+                        <h3 class="summary-note__title">
+                            <i class="fas fa-shipping-fast"></i> Entrega em 3-5 dias úteis
+                        </h3>
+                        <p class="summary-note__text">
+                            Seu pedido será enviado para o endereço selecionado. Você receberá atualizações por e-mail.
+                        </p>
+                    </div>
+                    
+                    <div class="secure-payment">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Pagamento 100% seguro e criptografado</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</div>
+
+<script>
+// Script para funcionalidades do checkout
+document.addEventListener('DOMContentLoaded', function() {
+    // Seleção de endereço
+    const addressCards = document.querySelectorAll('.address-card');
+    const addressForm = document.querySelector('.address-form');
+    
+    addressCards.forEach(card => {
+        card.addEventListener('click', function() {
+            // Remover classe selected de todos os cards
+            addressCards.forEach(c => c.classList.remove('selected'));
+            
+            // Adicionar classe selected ao card clicado
+            this.classList.add('selected');
+            
+            // Preencher formulário com dados do endereço selecionado
+            document.getElementById('endereco_destinatario').value = this.dataset.destinatario || '';
+            document.getElementById('endereco_rua').value = this.dataset.rua || '';
+            document.getElementById('endereco_numero').value = this.dataset.numero || '';
+            document.getElementById('endereco_complemento').value = this.dataset.complemento || '';
+            document.getElementById('endereco_bairro').value = this.dataset.bairro || '';
+            document.getElementById('endereco_cidade').value = this.dataset.cidade || '';
+            document.getElementById('endereco_estado').value = this.dataset.estado || '';
+            document.getElementById('endereco_cep').value = this.dataset.cep || '';
+            document.getElementById('endereco_telefone').value = this.dataset.telefone || '';
+        });
+    });
+    
+    // Seleção de método de pagamento
+    const paymentMethods = document.querySelectorAll('.payment-method');
+    const cardDetails = document.getElementById('credit-card-details');
+    const formaPagamentoInput = document.getElementById('forma_pagamento');
+    const discountRow = document.getElementById('discount-row');
+    const discountType = document.getElementById('discount-type');
+    const discountAmount = document.getElementById('discount-amount');
+    const totalPrice = document.querySelector('.total-price');
+    const originalTotal = parseFloat("{{ total }}");
+    
+    paymentMethods.forEach(method => {
+        method.addEventListener('click', function() {
+            // Remover classe selected de todos os métodos
+            paymentMethods.forEach(m => m.classList.remove('selected'));
+            
+            // Adicionar classe selected ao método clicado
+            this.classList.add('selected');
+            
+            // Atualizar campo oculto
+            const methodName = this.dataset.method;
+            formaPagamentoInput.value = methodName;
+            
+            // Mostrar/esconder detalhes do cartão de crédito
+            if (methodName === 'credito') {
+                cardDetails.classList.add('active');
+            } else {
+                cardDetails.classList.remove('active');
+            }
+            
+            // Aplicar desconto conforme método de pagamento
+            let discountPercentage = 0;
+            let discountText = '';
+            
+            if (methodName === 'pix') {
+                discountPercentage = 0.05; // 5% de desconto
+                discountText = 'PIX';
+            }
+            
+            if (discountPercentage > 0) {
+                const discountValue = originalTotal * discountPercentage;
+                const newTotal = originalTotal - discountValue;
+                
+                discountType.textContent = discountText;
+                discountAmount.textContent = `- R$ ${discountValue.toFixed(2)}`;
+                totalPrice.textContent = `R$ ${newTotal.toFixed(2)}`;
+                discountRow.style.display = 'flex';
+            } else {
+                totalPrice.textContent = `R$ ${originalTotal.toFixed(2)}`;
+                discountRow.style.display = 'none';
+            }
+        });
+    });
+    
+    // Formatação de campos
+    const cardNumber = document.getElementById('card-number');
+    const cardExpiry = document.getElementById('card-expiry');
+    
+    if (cardNumber) {
+        cardNumber.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(\d{4})/g, '$1 ').trim();
+            e.target.value = value.substring(0, 19);
+        });
+    }
+    
+    if (cardExpiry) {
+        cardExpiry.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            e.target.value = value.substring(0, 5);
+        });
+    }
+    
+    // Validação do formulário antes do envio
+    const checkoutForm = document.getElementById('checkout-form');
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', function(e) {
+            // Verificar se um endereço foi selecionado ou preenchido
+            const destinatario = document.getElementById('endereco_destinatario').value;
+            const rua = document.getElementById('endereco_rua').value;
+            const numero = document.getElementById('endereco_numero').value;
+            const bairro = document.getElementById('endereco_bairro').value;
+            const cidade = document.getElementById('endereco_cidade').value;
+            const estado = document.getElementById('endereco_estado').value;
+            const cep = document.getElementById('endereco_cep').value;
+            const telefone = document.getElementById('endereco_telefone').value;
+            
+            if (!destinatario || !rua || !numero || !bairro || !cidade || !estado || !cep || !telefone) {
+                e.preventDefault();
+                alert('Por favor, preencha todos os campos do endereço.');
+                return;
+            }
+            
+            // Se for cartão de crédito, verificar campos obrigatórios
+            const selectedPayment = document.querySelector('.payment-method.selected');
+            if (selectedPayment && selectedPayment.dataset.method === 'credito') {
+                const cardNum = document.getElementById('card-number').value;
+                const cardName = document.getElementById('card-name').value;
+                const cardExp = document.getElementById('card-expiry').value;
+                const cardCvv = document.getElementById('card-cvv').value;
+                
+                if (!cardNum || !cardName || !cardExp || !cardCvv) {
+                    e.preventDefault();
+                    alert('Por favor, preencha todos os dados do cartão de crédito.');
+                    return;
+                }
+            }
+        });
+    }
+});
+</script>
+
+{% endblock %}

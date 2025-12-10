@@ -1,0 +1,131 @@
+<!--
+    DETALHE PRODUTO PAGE - Página de detalhes do produto
+    
+    Exibe informações completas de um produto específico:
+    - Imagens (principal e adicionais)
+    - Nome e descrição
+    - Preço e disponibilidade
+    - Avaliações dos usuários
+    - Produtos relacionados
+    - Formulário para adicionar ao carrinho
+-->
+
+{% extends 'nucleo/base.html' %}
+
+
+{% block title %}{{ produto.nome }} - NerdHub{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<!-- Carregar CSS específico da página de detalhe -->
+<link rel="stylesheet" href="{% static 'css/detalhe_produto.css' %}">
+
+<!-- Container principal do produto -->
+<div class="produto-detalhe-container">
+    <!-- ============================================ -->
+    <!-- ÁREA PRINCIPAL DO PRODUTO -->
+    <!-- ============================================ -->
+    <div class="produto-main">
+        <!-- Galeria de imagens -->
+        <div class="produto-galeria">
+            <!-- Imagem principal -->
+            <img id="imagem-principal" src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}">
+            
+            <!-- Miniaturas das imagens -->
+            <div class="miniaturas">
+                <!-- Imagem principal como miniatura -->
+                <img src="{{ produto.imagem_principal.url }}" onclick="trocarImagem(this)">
+                
+                <!-- Imagens adicionais -->
+                {% for imagem in produto.imagens_adicionais.all %}
+                    <img src="{{ imagem.imagem.url }}" onclick="trocarImagem(this)">
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Informações do produto -->
+        <div class="produto-info">
+            <h2>{{ produto.nome }}</h2>
+            <p class="descricao">{{ produto.descricao }}</p>
+            
+            <!-- Preço -->
+            {% if produto.preco %}
+                <p class="preco">R$ {{ produto.preco }}</p>
+            {% endif %}
+            
+            <!-- Formulário para adicionar ao carrinho -->
+            <form action="{% url 'nucleo:adicionar_ao_carrinho' produto.id %}" method="post">
+                {% csrf_token %}
+                
+                <!-- Botão de compra condicional -->
+                <button type="submit" class="btn-comprar" {% if produto.estoque < 1 %}disabled{% endif %}>
+                    {% if produto.estoque < 1 %}Sem estoque{% else %}Adicionar ao carrinho{% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- AVALIAÇÕES DOS USUÁRIOS -->
+    <!-- ============================================ -->
+    <div class="produto-reviews">
+        <h3>Avaliações</h3>
+        
+        <!-- Listar avaliações existentes -->
+        {% for review in reviews %}
+            <div class="review">
+                <strong>{{ review.usuario.username }}</strong> - ⭐{{ review.nota }} <p>{{ review.texto }}</p>
+            </div>
+        {% empty %}
+            <p>Seja o primeiro a avaliar!</p>
+        {% endfor %}
+
+        <!-- Formulário para adicionar nova avaliação (apenas usuários logados) -->
+        {% if user.is_authenticated %}
+        <form action="{% url 'nucleo:adicionar_review' produto.id %}" method="post">
+            {% csrf_token %}
+            <textarea name="texto" required></textarea>
+            
+            <!-- Seleção de nota (1-5 estrelas) -->
+            <select name="nota">
+                {% for i in "12345" %}
+                <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+            
+            <button type="submit">Enviar</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <!-- ============================================ -->
+    <!-- PRODUTOS RELACIONADOS -->
+    <!-- ============================================ -->
+    <div class="produtos-relacionados">
+        <h3>Produtos relacionados</h3>
+        
+        <div class="lista-relacionados">
+            <!-- Listar produtos relacionados -->
+            {% for p in relacionados %}
+                <div class="item-relacionado">
+                    <a href="{% url 'nucleo:detalhe_produto' p.id %}">
+                        <img src="{{ p.imagem_principal.url }}" alt="{{ p.nome }}">
+                        <p>{{ p.nome }}</p>
+                    </a>
+                </div>
+            {% empty %}
+                <p>Sem produtos relacionados</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Script para trocar imagem principal ao clicar nas miniaturas -->
+<script>
+function trocarImagem(elem) {
+    document.getElementById('imagem-principal').src = elem.src;
+}
+</script>
+
+{% endblock %}

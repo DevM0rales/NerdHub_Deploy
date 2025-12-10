@@ -1,0 +1,14 @@
+{% extends 'nucleo/base.html' %}
+
+{% block title %}Bem-vindo - NerdHub{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div style="margin-top: 120px; text-align: center;">
+    <h2>Bem-vindo!</h2>
+    <p>Login realizado com sucesso!</p>
+    <a href="{% url 'nucleo:index' %}">Voltar para a página inicial</a>
+</div>
+
+{% endblock %}

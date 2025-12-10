@@ -1,0 +1,139 @@
+<!--
+    INDEX PAGE - Página inicial do site
+    
+    Página principal que apresenta:
+    - Banner promocional
+    - Benefícios do site
+    - Navegação por marcas famosas
+    - Produtos em destaque (Funkos do mês)
+-->
+
+{% extends 'nucleo/base.html' %}
+
+{% block title %}Página Inicial - NerdHub{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<!-- Carregar CSS específico da página inicial -->
+<link rel="stylesheet" href="{% static 'css/style_index.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- ============================================ -->
+    <!-- BANNER PRINCIPAL COM CARROSSEL -->
+    <!-- ============================================ -->
+    <div class="carousel">
+        <div class="carousel-track">
+            <img src="{% static 'img/banner_1.jpeg' %}" class="carousel-img" alt="Banner Promocional 1">
+            <img src="{% static 'img/banner_2.jpeg' %}" class="carousel-img" alt="Banner Promocional 2">
+            <img src="{% static 'img/banner_3.jpeg' %}" class="carousel-img" alt="Banner Promocional 3">
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- BENEFÍCIOS/ATALHOS -->
+    <!-- ============================================ -->
+    <section class="beneficios">
+        <!-- Parcelamento -->
+        <div class="beneficio-item">
+            <img src="{% static 'img/icon_cartao.png' %}" alt="icon_cartao">
+            <p>Em até 12x sem juros</p>
+        </div>
+
+        <!-- Entrega rápida -->
+        <div class="beneficio-item">
+            <img src="{% static 'img/icon_carro_entrega.png' %}" alt="icon_carro_entrega">
+            <p>Entrega rápida</p>
+        </div>
+
+        <!-- Frete grátis -->
+        <div class="beneficio-item">
+            <img src="{% static 'img/icon_caixa.png' %}" alt="icon_caixa">
+            <p>Frete grátis</p>
+        </div>
+
+        <!-- Desconto no Pix -->
+        <div class="beneficio-item">
+            <img src="{% static 'img/icon_pix.png' %}" alt="icon_pix">
+            <p>Selecione o Pix e ganhe 5% de desconto</p>
+        </div>
+
+    </section>
+
+    <!-- ============================================ -->
+    <!-- MARCAS FAMOSAS -->
+    <!-- ============================================ -->
+    <section class="marcas-section">
+        <h2>Navegue por Marcas Famosas</h2>
+        <div class="brand-buttons">
+            <!-- Disney -->
+            <button class="brand-img-button">
+                <a href="{% url 'nucleo:produtos_por_marca' 'Disney' %}">
+                    <img src="{% static 'img/BannerDisney.png' %}" alt="Disney">
+                </a>
+            </button>
+            
+            <!-- Marvel -->
+            <button class="brand-img-button">
+                <a href="{% url 'nucleo:produtos_por_marca' 'Marvel' %}">
+                    <img src="{% static 'img/BannerMarvel.png' %}" alt="Marvel">
+                </a>
+            </button>
+
+            <!-- Star Wars -->
+            <button class="brand-img-button">
+                <a href="{% url 'nucleo:produtos_por_marca' 'Star Wars' %}">
+                    <img src="{% static 'img/BannerStarWars.png' %}" alt="Star Wars">
+                </a>
+            </button>
+
+            <!-- PlayStation -->
+            <button class="brand-img-button">
+                <a href="{% url 'nucleo:produtos_por_marca' 'PlayStation' %}">
+                    <img src="{% static 'img/BannerPlayStation.png' %}" alt="PlayStation">
+                </a>
+            </button>
+
+            <!-- Xbox -->
+            <button class="brand-img-button">
+                <a href="{% url 'nucleo:produtos_por_marca' 'Xbox' %}">
+                    <img src="{% static 'img/BannerXbox.png' %}" alt="Xbox">
+                </a>
+            </button>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- PRODUTOS EM DESTAQUE (FUNKOS DO MÊS) -->
+    <!-- ============================================ -->
+    <section class="funkos ">
+        <div class="funko-grid">
+            <!-- Iterar por todos os produtos -->
+            {% for produto in produtos %}
+            <div class="funko-item">
+                <!-- Ícone de favorito -->
+                <div class="favorite-icon"></div>
+                
+                <!-- Link para detalhes do produto -->
+                <a href="{% url 'nucleo:detalhe_produto' produto.id %}">
+                    <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="funko-img">
+                </a>
+                
+                <!-- Nome do produto -->
+                <a href="{% url 'nucleo:detalhe_produto' produto.id %}">
+                    <h3>{{ produto.nome }}</h3>
+                </a>
+                
+                <!-- Preço -->
+                <p class="price">R$ {{ produto.preco }}</p>
+                
+                <!-- Parcelamento -->
+                <p>Em até 12x sem juros</p>
+               
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+
+{% endblock %}

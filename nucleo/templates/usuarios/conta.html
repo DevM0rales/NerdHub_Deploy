@@ -1,0 +1,27 @@
+{% extends 'nucleo/base.html' %}
+
+{% block title %}Login - NerdHub{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style_login_cadastro.css' %}">
+
+<div class="login-cadastro-container">
+    <div class="login-cadastro-form">
+        <h2>Entrar</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="username">Usuário:</label>
+            <input type="text" name="username" placeholder="Usuário" required>
+
+            <label for="senha">Senha:</label>
+            <input type="password" name="senha" placeholder="Senha" required>
+
+            <button type="submit">Entrar</button>
+        </form>
+
+        <p>Não tem conta? <a href="{% url 'usuario:cadastro' %}">Cadastre-se aqui</a></p>
+    </div>
+</div>
+
+{% endblock %}

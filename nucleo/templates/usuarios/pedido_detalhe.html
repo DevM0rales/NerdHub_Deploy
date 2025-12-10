@@ -1,0 +1,447 @@
+{% extends 'nucleo/base.html' %}
+{% load static %}
+
+{% block title %}Detalhes do Pedido #{{ pedido.id }} - NerdHub{% endblock %}
+
+{% block extra_css %}
+    <!-- Link para o CSS da sidebar -->
+    <link rel="stylesheet" href="{% static 'css/style_perfil_novo.css' %}">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="sidebar-container">
+    <!-- Sidebar de Navegação -->
+    <aside class="sidebar">
+        <h2 class="sidebar__title">
+            <i class="fas fa-cog"></i> Configurações
+        </h2>
+        
+        <nav class="sidebar__nav" aria-label="Navegação de configurações">
+            <ul class="sidebar__list">
+                <li class="sidebar__item">
+                    <a href="{% url 'usuario:perfil' %}" class="sidebar__link">
+                        <i class="fas fa-user"></i>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+                
+                <li class="sidebar__item">
+                    <a href="{% url 'usuario:perfil' %}?tab=seguranca" class="sidebar__link">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Segurança</span>
+                    </a>
+                </li>
+                
+                <li class="sidebar__item">
+                    <a href="{% url 'usuario:perfil' %}?tab=endereco" class="sidebar__link">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Endereço</span>
+                    </a>
+                </li>
+                
+                <li class="sidebar__item sidebar__item--active">
+                    <a href="{% url 'usuario:perfil' %}?tab=pedidos" class="sidebar__link">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Pedidos</span>
+                    </a>
+                </li>
+                
+                <li class="sidebar__item">
+                    <a href="{% url 'usuario:perfil' %}?tab=conta" class="sidebar__link">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Conta</span>
+                    </a>
+                </li>
+                
+                <li class="sidebar__item sidebar__item--support">
+                    <a href="#suporte" class="sidebar__link">
+                        <i class="fas fa-comments"></i>
+                        <span>Chat Suporte</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <!-- Conteúdo Principal -->
+    <div class="main-content-wrapper">
+        <main class="main-content">
+            <!-- Cabeçalho -->
+            <header class="content-header">
+                <h1 class="content-title">
+                    <i class="fas fa-receipt"></i> Detalhes do Pedido #{{ pedido.id }}
+                </h1>
+                <p class="page-subtitle">Informações completas sobre seu pedido</p>
+            </header>
+            
+            <!-- Conteúdo do Pedido -->
+            <section class="order-detail-section">
+                <div class="order-header">
+                    <div class="order-info">
+                        <div class="info-item">
+                            <span class="info-label">Data do Pedido</span>
+                            <span class="info-value">{{ pedido.criado_em|date:"d/m/Y H:i" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Status</span>
+                            <span class="status-badge status-badge--delivered">
+                                <span class="status-badge__dot"></span>
+                                Finalizado
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Total</span>
+                            <span class="info-value price">R$ {{ pedido.total|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Itens do Pedido -->
+                <div class="order-items-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-box-open"></i> Itens do Pedido ({{ itens|length }})
+                    </h3>
+                    
+                    <div class="items-list">
+                        {% for item in itens %}
+                        <div class="item-card">
+                            <div class="item-image">
+                                <div class="image-placeholder">
+                                    <i class="fas fa-image"></i>
+                                </div>
+                            </div>
+                            <div class="item-details">
+                                <h4 class="item-name">{{ item.produto.nome }}</h4>
+                                <div class="item-meta">
+                                    <span class="item-quantity">{{ item.quantidade }}x</span>
+                                    <span class="item-price">R$ {{ item.preco_unitario|floatformat:2 }}</span>
+                                </div>
+                                <div class="item-subtotal">
+                                    Subtotal: <span class="price">R$ {{ item.get_subtotal|floatformat:2 }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Informações de Entrega -->
+                <div class="order-delivery-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-truck"></i> Informações de Entrega
+                    </h3>
+                    
+                    <div class="delivery-info">
+                        <div class="info-row">
+                            <span class="info-label">Destinatário</span>
+                            <span class="info-value">{{ pedido.endereco_destinatario }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Endereço</span>
+                            <span class="info-value">
+                                {{ pedido.endereco_rua }}, {{ pedido.endereco_numero }}
+                                {% if pedido.endereco_complemento %} - {{ pedido.endereco_complemento }}{% endif %}
+                            </span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Bairro</span>
+                            <span class="info-value">{{ pedido.endereco_bairro }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Cidade/Estado</span>
+                            <span class="info-value">{{ pedido.endereco_cidade }}/{{ pedido.endereco_estado }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">CEP</span>
+                            <span class="info-value">{{ pedido.endereco_cep }}</span>
+                        </div>
+                        {% if pedido.endereco_telefone %}
+                        <div class="info-row">
+                            <span class="info-label">Telefone</span>
+                            <span class="info-value">{{ pedido.endereco_telefone }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Informações de Pagamento -->
+                <div class="order-payment-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-credit-card"></i> Informações de Pagamento
+                    </h3>
+                    
+                    <div class="payment-info">
+                        <div class="info-row">
+                            <span class="info-label">Forma de Pagamento</span>
+                            <span class="info-value">{{ pedido.get_forma_pagamento_display|default:"Não especificada" }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Total Pago</span>
+                            <span class="info-value price">R$ {{ pedido.total|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ações -->
+                <div class="order-actions">
+                    <a href="{% url 'usuario:perfil' %}?tab=pedidos" class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Voltar para Pedidos
+                    </a>
+                    <button class="btn btn-primary" onclick="printInvoice()">
+                        <i class="fas fa-print"></i> Imprimir Nota
+                    </button>
+                    <button class="btn btn-success" onclick="reorderItems('{{ pedido.id }}')">
+                        <i class="fas fa-redo"></i> Comprar Novamente
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<script>
+    function printInvoice() {
+        alert('Função de impressão seria implementada aqui');
+        // Aqui você adicionaria a lógica para imprimir a nota fiscal
+    }
+    
+    function reorderItems(orderId) {
+        alert(`Adicionando itens do pedido #${orderId} ao carrinho`);
+        // Aqui você adicionaria a lógica para adicionar os itens ao carrinho
+    }
+</script>
+
+<style>
+/* CSS específico para a página de detalhes do pedido */
+.order-detail-section {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.order-header {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.order-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.info-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.info-value {
+    font-size: 1rem;
+    color: #374151;
+    font-weight: 600;
+}
+
+.price {
+    color: #55a143;
+}
+
+.section-title {
+    color: #333333;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.item-card {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f9fafb;
+    transition: all 0.2s ease;
+}
+
+.item-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.item-image {
+    flex-shrink: 0;
+}
+
+.image-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    background: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+}
+
+.item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.item-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #374151;
+    margin: 0;
+}
+
+.item-meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.item-quantity {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.item-price {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.item-subtotal {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 0.5rem;
+}
+
+.delivery-info, .payment-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f9fafb;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.order-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    border: 1px solid transparent;
+}
+
+.btn-outline {
+    background: #f3f4f6;
+    color: #6b7280;
+    border: 1px solid #e5e7eb;
+}
+
+.btn-outline:hover {
+    background: #e5e7eb;
+}
+
+.btn-primary {
+    background: #55a143;
+    color: white;
+    border: 1px solid #55a143;
+}
+
+.btn-primary:hover {
+    background: #4a8f3a;
+}
+
+.btn-success {
+    background: #10b981;
+    color: white;
+    border: 1px solid #10b981;
+}
+
+.btn-success:hover {
+    background: #059669;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .order-detail-section {
+        padding: 1.5rem;
+    }
+    
+    .item-card {
+        flex-direction: column;
+    }
+    
+    .order-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .order-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+{% endblock %}

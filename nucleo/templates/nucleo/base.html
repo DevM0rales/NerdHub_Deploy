@@ -1,0 +1,292 @@
+<!--
+    TEMPLATE BASE - Estrutura principal do site
+    
+    Esta é a template base que define a estrutura comum de todas as páginas.
+    
+    Componentes principais:
+    - Header com navegação e menu de usuário
+    - Área de conteúdo dinâmico (bloco content)
+    - Footer com informações institucionais
+    - Sistema de mensagens
+    - Scripts compartilhados
+-->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+{% load user_tags %}
+<!--ARQUIVOS METAS-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título dinâmico definido pelas páginas filhas -->
+    <title>{% block title %}NerdHub{% endblock %}</title>
+    
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
+    
+    <!-- Bloco para CSS extra específico de páginas -->
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- ============================================ -->
+    <!-- HEADER - Cabeçalho do site -->
+    <!-- ============================================ -->
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="header__top-content">
+                    <h1 class="logo">
+                        <a href="{% url 'nucleo:index' %}" aria-label="Nerd Hub - Página inicial">
+                            <i class=""></i> NerdHub
+                        </a>
+                    </h1>
+                    
+                    <div class="header__search">
+                        <form class="search-form">
+                            <input 
+                                type="search" 
+                                class="search-input" 
+                                placeholder="O que você está procurando?" 
+                                aria-label="Buscar produtos"
+                            >
+                            <button type="submit" class="search-button" aria-label="Buscar">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="header__actions">
+                        <!-- Ícone do carrinho -->
+                        <a href="{% url 'nucleo:ver_carrinho' %}" class="header__action" aria-label="Carrinho de compras">
+                            <i class="fas fa-shopping-cart"></i>
+                        </a>
+                        
+                        <!-- Menu de usuário condicional -->
+                        {% if user.is_authenticated %}
+                        <!-- Usuário logado -->
+                        <div class="user-menu">
+                            <button class="header__action" aria-label="Perfil do usuário">
+                                {% get_user_profile as user_profile %}
+                                {% if user_profile and user_profile.avatar_url %}
+                                <img src="{{ user_profile.avatar_url }}" alt="Foto de perfil" class="profile-avatar">
+                                {% else %}
+                                <i class="fas fa-user"></i>
+                                {% endif %}
+                            </button>
+                            <div class="user-menu-content">
+                                <a href="{% url 'usuario:perfil' %}">Meu Perfil</a>
+                                <a href="{% url 'usuario:enderecos' %}">Meus Endereços</a>
+                                <a href="{% url 'usuario:logout' %}">Sair</a>
+                            </div>
+                        </div>
+                        {% else %}
+                        <!-- Usuário não logado -->
+                        <a href="{% url 'usuario:conta' %}" class="header__action" aria-label="Entrar">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="header__bottom">
+            <div class="container">
+                <nav class="main-nav" aria-label="Navegação principal">
+                    <ul class="main-nav__list">
+                        <li class="main-nav__item">
+                            <a href="{% url 'nucleo:index' %}" class="main-nav__link {% if page_name == 'index' %}active{% endif %}">
+                                <i class=""></i> Principal
+                            </a>
+                        </li>
+                        <li class="main-nav__item">
+                            <a href="{% url 'nucleo:sobre' %}" class="main-nav__link {% if page_name == 'sobre' %}active{% endif %}">
+                                <i class=""></i> Sobre Nós
+                            </a>
+                        </li>
+                        <li class="main-nav__item">
+                            <a href="{% url 'nucleo:suporte' %}" class="main-nav__link {% if page_name == 'suporte' %}active{% endif %}">
+                                <i class=""></i> Suporte
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================ -->
+    <!-- CONTEÚDO PRINCIPAL -->
+    <!-- ============================================ -->
+    <main>
+        <!-- Sistema de mensagens do Django -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <!-- Conteúdo específico de cada página -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ============================================ -->
+    <!-- FOOTER - Rodapé do site -->
+    <!-- ============================================ -->
+    <footer>
+        <div class="footer-top">
+            <!-- Sobre a empresa -->
+            <div>
+                <h4>Nerd Hub</h4>
+                <p>Sua loja de confiança para produtos de alta qualidade e atendimento excepcional.</p>
+            </div>
+            
+            <!-- Links rápidos -->
+            <div>
+                <h4>Links Rápidos</h4>
+                <ul>
+                    <li><a href="{% url 'nucleo:index' %}">Principal</a></li>
+                    <li><a href="{% url 'nucleo:sobre' %}">Sobre Nós</a></li>
+                    <li><a href="#">Loja</a></li>
+                    <li><a href="{% url 'nucleo:suporte' %}">Suporte</a></li>
+                </ul>
+            </div>
+            
+            <!-- Categorias -->
+            <div>
+                <h4>Categorias</h4>
+                <ul>
+                    <li><a href="#">Colecionáveis</a></li>
+                    <li><a href="#">Games</a></li>
+                    <li><a href="#">Acessórios</a></li>
+                    <li><a href="#">Vestuário</a></li>
+                </ul>
+            </div>
+            
+            <!-- Redes sociais -->
+            <div>
+                <h4>Redes Sociais</h4>
+                <div class="social-icons">
+                    <a href="#">📘</a>
+                    <a href="#">📸</a>
+                    <a href="#">✖️</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Direitos autorais -->
+        <div class="footer-bottom">
+            <p>&copy; 2024 NerdHub. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+
+<!-- Script para funcionalidade de suporte -->
+<script>
+    // Script básico para funcionalidades do header
+    document.addEventListener('DOMContentLoaded', function() {
+        // Adicionar comportamento ao campo de busca
+        const searchForm = document.querySelector('.search-form');
+        if (searchForm) {
+            searchForm.addEventListener('submit', function(e) {
+                const searchInput = this.querySelector('.search-input');
+                if (searchInput.value.trim() !== '') {
+                    console.log('Buscando por:', searchInput.value);
+                    // Aqui você pode adicionar a lógica de busca real
+                    // Por enquanto, vamos apenas limpar o campo
+                    searchInput.value = '';
+                } else {
+                    e.preventDefault();
+                }
+            });
+        }
+        
+        // Adicionar interatividade aos botões de ação
+        const actionButtons = document.querySelectorAll('.header__action');
+        actionButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const ariaLabel = this.getAttribute('aria-label');
+                if (ariaLabel.includes('Carrinho')) {
+                    window.location.href = '{% url "nucleo:ver_carrinho" %}';
+                } else if (ariaLabel.includes('Perfil')) {
+                    window.location.href = '{% url "usuario:perfil" %}';
+                } else if (ariaLabel.includes('Entrar')) {
+                    window.location.href = '{% url "usuario:conta" %}';
+                }
+            });
+        });
+    });
+    
+    // Função para enviar mensagem no chat de suporte
+    function enviarMensagem() {
+        const input = document.getElementById('user-input');
+        const mensagem = input.value.trim();
+        
+        // Verificar se há mensagem
+        if (!mensagem) return;
+
+        const chat = document.getElementById('chat-messages');
+
+        // Criar mensagem do usuário
+        const userMsg = document.createElement('p');
+        userMsg.textContent = mensagem;
+        userMsg.style.textAlign = 'right';
+        chat.appendChild(userMsg);
+
+        // Criar resposta do bot
+        const respostaBot = document.createElement('p');
+        respostaBot.classList.add('bot-message');
+        respostaBot.textContent = gerarResposta(mensagem);
+        chat.appendChild(respostaBot);
+
+        // Limpar input e rolar para baixo
+        input.value = '';
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    // Função para gerar respostas automáticas do bot
+    function gerarResposta(mensagem) {
+        mensagem = mensagem.toLowerCase();
+
+        if (mensagem.includes('erro') || mensagem.includes('problema')) {
+            return "Sinto muito! Verifique sua conexão e tente novamente. Caso continue, fale com nosso suporte técnico.";
+        } else if (mensagem.includes('login') || mensagem.includes('senha')) {
+            return "Você pode redefinir sua senha clicando em 'Esqueci minha senha' na tela de login.";
+        } else if (mensagem.includes('produto') || mensagem.includes('entrega')) {
+            return "Você pode acompanhar seu pedido na aba 'Meus Pedidos'. Precisa de mais ajuda?";
+        } else {
+            return "Desculpe, não entendi. Por favor, descreva sua dúvida com mais detalhes.";
+        }
+    }
+    
+    // Auto-esconder mensagens após 5 segundos
+    setTimeout(function() {
+        var messages = document.querySelector('.messages');
+        if (messages) {
+            messages.style.display = 'none';
+        }
+    }, 5000);
+</script>
+
+<!-- Scripts de funcionalidades extras -->
+<script src="{% static 'js/favorites.js' %}"></script>
+
+</html>

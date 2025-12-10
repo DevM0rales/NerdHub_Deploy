@@ -1,0 +1,238 @@
+.funkos {
+  padding: 3rem 1rem;
+  background-color: #0A715E;
+  text-align: center;
+}
+
+.funkos h2 {
+  font-size: 1.8rem;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.produtos-section {
+  padding: 3rem 1rem;
+  background-color: #0A715E;
+  text-align: center;
+}
+
+.produtos-section h2 {
+  font-size: 1.8rem;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.produto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.produto-item {
+  background-color: #37a68e;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+.produto-item:hover {
+  transform: translateY(-5px);
+}
+
+.produto-item .favorite-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.produto-item .favorite-icon::before {
+  content: "♥";
+  color: #ccc;
+  font-size: 16px;
+}
+
+.produto-item .favorite-icon:hover::before {
+  color: #ff6b6b;
+}
+
+.produto-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  align-self: center;
+}
+
+.produto-item h3 {
+  font-size: 16px;
+  margin: 0.5rem 0;
+  flex-grow: 1;
+}
+
+.produto-item .price {
+  font-weight: bold;
+  color: #0c4133;
+  margin-bottom: 0.5rem;
+}
+
+.produto-item .btn {
+  display: inline-block;
+  background-color: #0c4133;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.produto-item .btn:hover {
+  background-color: #0e614b;
+}
+
+.produto-image {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* BENEFÍCIOS / GATILHOS */
+.beneficios {
+  background-color: #2C2C2C;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem 1rem;
+  color: white;
+}
+
+.beneficio-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: transparent;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.beneficio-item img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.beneficio-item p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* BANNER */
+.banner img {
+  width: 100%;
+  display: block;
+}
+
+
+/* teste falho *//*
+.produto-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.produto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.produto-item {
+  * display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); *
+  background-color: #37a68e;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.produto-imagem {
+  * width: 140px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover; *
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.produto-info {
+  flex: 1;
+}
+
+.produto-info h3 {
+  * margin: 0;
+  color: black;
+  font-size: 1.4em; *
+  font-size: 16px;
+  margin: 0.5rem 0;
+}
+
+.price {
+  * color: #3c3c3c;
+  font-weight: bold;
+  margin: 5px 0; *
+  font-weight: bold;
+  color: #0c4133;
+  margin-bottom: 0.5rem;
+
+}
+
+.btn {
+  * background-color: #4b0082;
+  color: #000000;
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.3s; *
+  display: inline-block;
+  background-color: #0c4133;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #360060;
+} */

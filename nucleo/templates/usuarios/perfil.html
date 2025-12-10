@@ -1,0 +1,1088 @@
+{% extends 'nucleo/base.html' %}
+{% load static %}
+
+{% block title %}Configurações de Perfil - NerdHub{% endblock %}
+
+{% block extra_css %}
+    <!-- Link para o CSS da sidebar -->
+    <link rel="stylesheet" href="{% static 'css/style_perfil_novo.css' %}">
+    <!-- Link para o CSS da seção de segurança -->
+    <link rel="stylesheet" href="{% static 'css/style_seguranca.css' %}">
+    <!-- Link para o CSS da seção de endereços -->
+    <link rel="stylesheet" href="{% static 'css/style_endereco.css' %}">
+    <!-- Link para o CSS da seção de pedidos -->
+    <link rel="stylesheet" href="{% static 'css/style_pedidos.css' %}">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Remix Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Added a wrapper div with a specific class for the white background -->
+<div class="profile-page-wrapper">
+<div class="sidebar-container">
+    <!-- Sidebar de Navegação -->
+    <aside class="sidebar">
+        <h2 class="sidebar__title">
+            <i class="fas fa-cog"></i> Configurações
+        </h2>
+        
+        <nav class="sidebar__nav" aria-label="Navegação de configurações">
+            <ul class="sidebar__list">
+                <li class="sidebar__item sidebar__item--active">
+                    <a href="#perfil" class="sidebar__link">
+                        <i class="fas fa-user"></i>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+                
+                <li class="sidebar__item">
+                    <a href="#seguranca" class="sidebar__link">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Segurança</span>
+                    </a>
+                </li>
+                
+                <li class="sidebar__item">
+                    <a href="#endereco" class="sidebar__link">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Endereço</span>
+                    </a>
+                </li>
+                
+                <li class="sidebar__item">
+                    <a href="#pedidos" class="sidebar__link">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Pedidos</span>
+                    </a>
+                </li>
+                
+                <li class="sidebar__item sidebar__item--support">
+                    <a href="/suporte/" class="sidebar__link">
+                        <i class="fas fa-comments"></i>
+                        <span>Chat Suporte</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <!-- Conteúdo Principal -->
+    <div class="main-content-wrapper">
+        <main class="main-content">
+            <!-- Cabeçalho -->
+            <header class="content-header">
+                <h1 class="content-title">Perfil</h1>
+                <p class="page-subtitle">Informações básicas do seu perfil</p>
+            </header>
+
+            <!-- Avatar -->
+            <div class="profile-avatar-section">
+                <div class="profile-avatar">
+                    <div class="avatar-circle">
+                        {% if perfil.avatar_url %}
+                        <img src="{{ perfil.avatar_url }}" alt="Foto de perfil" class="profile-avatar-img">
+                        {% else %}
+                        <i class="fas fa-user avatar-icon"></i>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="avatar-actions">
+                    <button class="btn btn-primary" id="changeAvatarBtn">
+                        <i class="fas fa-camera"></i>
+                        Mudar Foto
+                    </button>
+                    {% if perfil.avatar_url %}
+                    <button class="btn btn-danger" id="removeAvatarBtn">
+                        <i class="fas fa-trash"></i>
+                        Remover
+                    </button>
+                    {% endif %}
+                </div>
+                
+                <!-- Hidden file input for avatar upload -->
+                <input type="file" id="avatarInput" accept="image/png, image/jpeg, image/jpg" style="display: none;">
+            </div>
+
+            <!-- Formulário do Perfil -->
+            <form class="profile-form" method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="display_name">Nome de Perfil</label>
+                        <input type="text" id="display_name" name="display_name" class="form-input" value="{{ perfil.display_name|default:user.username }}" required>
+                        <small class="form-help">Este nome será exibido publicamente</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="full_name">Nome Completo *</label>
+                        <input type="text" id="full_name" name="full_name" class="form-input" value="{% if perfil.first_name or perfil.last_name %}{{ perfil.first_name }} {{ perfil.last_name }}{% else %}{{ user.get_full_name }}{% endif %}" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">E-mail *</label>
+                        <input type="email" id="email" class="form-input" value="{{ user.email|default:'' }}" readonly>
+                        <small class="form-help">Para alterar o e-mail, entre em contato com o suporte</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Telefone</label>
+                        <input type="tel" id="phone" name="phone" class="form-input" value="{{ perfil.phone|default:'' }}">
+                        <small class="form-help">Formato: (99) 99999-9999</small>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="birth_date">Data de Nascimento</label>
+                        <div class="date-wrapper">
+                            <input type="date" id="birth_date" name="birth_date" class="form-input date-input" value="{% if perfil.birth_date %}{{ perfil.birth_date|date:'Y-m-d' }}{% endif %}">
+                            <i class="fas fa-calendar date-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gender">Gênero</label>
+                        <div class="select-wrapper">
+                            <select id="gender" name="gender" class="form-input">
+                                <option value="">Selecione...</option>
+                                <option value="male" {% if perfil.gender == 'male' %}selected{% endif %}>Masculino</option>
+                                <option value="female" {% if perfil.gender == 'female' %}selected{% endif %}>Feminino</option>
+                                <option value="other" {% if perfil.gender == 'other' %}selected{% endif %}>Outro</option>
+                                <option value="prefer_not" {% if perfil.gender == 'prefer_not' %}selected{% endif %}>Prefiro não dizer</option>
+                            </select>
+                            <i class="fas fa-chevron-down select-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão Salvar -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success btn-large">
+                        <i class="fas fa-save"></i>
+                        Salvar Alterações
+                    </button>
+                </div>
+            </form>
+
+            <!-- Seção de Segurança -->
+            <section class="security-section" id="seguranca-tab" style="display: none;">
+                <h2 class="content-title">Segurança da Conta</h2>
+                <p class="page-subtitle">Gerencie sua senha e veja suas sessões ativas</p>
+                
+                <!-- Change Password Section -->
+                <section class="password-section" aria-labelledby="password-title">
+                    <h3 id="password-title" class="password-section__title">
+                        Alterar Senha
+                    </h3>
+                    
+                    <form class="password-form" id="password-form" method="post" action="{% url 'usuario:perfil' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="change_password" value="1">
+                        <div class="form-group">
+                            <label for="current_password" class="form-label">
+                                Senha Atual
+                            </label>
+                            <div class="input-wrapper">
+                                <input 
+                                    type="password" 
+                                    id="current_password" 
+                                    name="current_password"
+                                    class="form-input"
+                                    placeholder="Digite sua senha atual"
+                                    required
+                                    minlength="6"
+                                >
+                                <button type="button" class="password-toggle" aria-label="Mostrar senha">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="form-hint" id="current-password-hint">
+                                Digite sua senha atual para confirmar sua identidade.
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new_password" class="form-label">
+                                Nova Senha
+                            </label>
+                            <div class="input-wrapper">
+                                <input 
+                                    type="password" 
+                                    id="new_password" 
+                                    name="new_password"
+                                    class="form-input"
+                                    placeholder="Digite sua nova senha"
+                                    required
+                                    minlength="8"
+                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
+                                >
+                                <button type="button" class="password-toggle" aria-label="Mostrar senha">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="form-hint" id="new-password-hint">
+                                Mínimo 8 caracteres, incluindo maiúsculas, minúsculas e números.
+                            </div>
+                            <div class="password-strength">
+                                <div class="strength-bar"></div>
+                                <span class="strength-text">Força da senha: <span id="strength-value">Fraca</span></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirm_password" class="form-label">
+                                Confirmar Nova Senha
+                            </label>
+                            <div class="input-wrapper">
+                                <input 
+                                    type="password" 
+                                    id="confirm_password" 
+                                    name="confirm_password"
+                                    class="form-input"
+                                    placeholder="Confirme sua nova senha"
+                                    required
+                                >
+                                <button type="button" class="password-toggle" aria-label="Mostrar senha">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="form-hint" id="confirm-password-hint">
+                                Digite novamente a nova senha para confirmar.
+                            </div>
+                            <div class="password-match" id="password-match">
+                                <i class="fas fa-check-circle"></i> As senhas coincidem
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn--primary">
+                                <i class="fas fa-save"></i> Salvar Alterações
+                            </button>
+                            <button type="reset" class="btn btn--secondary">
+                                <i class="fas fa-redo"></i> Limpar
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                
+            </section>
+
+            <!-- Seção de Endereços -->
+            <section class="address-section" id="endereco-tab" style="display: none;">
+                <h2 class="content-title">Endereços de Entrega</h2>
+                <p class="page-subtitle">Gerencie seus endereços de entrega</p>
+                
+                <!-- Lista de Endereços -->
+                <div class="address-cards">
+                    {% for endereco in enderecos %}
+                    <div class="address-card {% if endereco.is_default_shipping %}main-address{% endif %}">
+                        <div class="address-card__label">
+                            <i class="fas fa-tag"></i>
+                            {{ endereco.label|default:"Endereço" }}
+                        </div>
+                        <div class="address-card__recipient">
+                            {{ endereco.recipient_name }}
+                        </div>
+                        <div class="address-card__details">
+                            {{ endereco.street }}, {{ endereco.number }}{% if endereco.complement %} - {{ endereco.complement }}{% endif %}<br>
+                            {{ endereco.neighborhood }} - {{ endereco.city }}/{{ endereco.state }}<br>
+                            CEP: {{ endereco.postal_code }}<br>
+                            {% if endereco.phone_at_address %}
+                            Tel: {{ endereco.phone_at_address }}
+                            {% endif %}
+                        </div>
+                        <div class="address-card__actions">
+                            {% if not endereco.is_default_shipping %}
+                            <form method="post" action="{% url 'usuario:endereco_definir_principal' endereco.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-address btn-address-main">
+                                    <i class="fas fa-star"></i> Tornar Principal
+                                </button>
+                            </form>
+                            {% endif %}
+                            <a href="{% url 'usuario:endereco_editar' endereco.id %}" class="btn-address btn-address-edit">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            {% if not endereco.is_default_shipping %}
+                            <form method="post" action="{% url 'usuario:endereco_excluir' endereco.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-address btn-address-delete" onclick="return confirm('Tem certeza que deseja excluir este endereço?')">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="address-card">
+                        <div class="address-card__label">
+                            <i class="fas fa-info-circle"></i>
+                            Nenhum endereço cadastrado
+                        </div>
+                        <div class="address-card__details">
+                            Você ainda não possui nenhum endereço cadastrado.
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Botão para adicionar novo endereço -->
+                <button id="addAddressBtn" class="add-address-btn">
+                    <i class="fas fa-plus"></i> Adicionar Novo Endereço
+                </button>
+                
+                <!-- Formulário para adicionar/editar endereço -->
+                <div class="address-form-container" id="addressFormContainer">
+                    <h3 class="form-title">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {% if editing_endereco %}
+                            Editar Endereço
+                        {% else %}
+                            Adicionar Novo Endereço
+                        {% endif %}
+                    </h3>
+                    
+                    <form method="post" action="{% url 'usuario:endereco_adicionar' %}">
+                        {% csrf_token %}
+                        {% if editing_endereco %}
+                            <input type="hidden" name="endereco_id" value="{{ editing_endereco.id }}">
+                        {% endif %}
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="label" class="form-label">Rótulo do Endereço *</label>
+                                <input type="text" id="label" name="label" class="form-input" 
+                                       value="{{ editing_endereco.label|default:'' }}" required
+                                       placeholder="Ex: Casa, Trabalho, etc.">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="recipient_name" class="form-label">Nome do Destinatário *</label>
+                                <input type="text" id="recipient_name" name="recipient_name" class="form-input" 
+                                       value="{{ editing_endereco.recipient_name|default:'' }}" required
+                                       placeholder="Nome completo">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="street" class="form-label">Logradouro *</label>
+                                <input type="text" id="street" name="street" class="form-input" 
+                                       value="{{ editing_endereco.street|default:'' }}" required
+                                       placeholder="Rua, Avenida, etc.">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="number" class="form-label">Número *</label>
+                                <input type="text" id="number" name="number" class="form-input" 
+                                       value="{{ editing_endereco.number|default:'' }}" required
+                                       placeholder="Número">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="complement" class="form-label">Complemento</label>
+                                <input type="text" id="complement" name="complement" class="form-input" 
+                                       value="{{ editing_endereco.complement|default:'' }}"
+                                       placeholder="Apartamento, bloco, etc.">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="neighborhood" class="form-label">Bairro *</label>
+                                <input type="text" id="neighborhood" name="neighborhood" class="form-input" 
+                                       value="{{ editing_endereco.neighborhood|default:'' }}" required
+                                       placeholder="Bairro">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city" class="form-label">Cidade *</label>
+                                <input type="text" id="city" name="city" class="form-input" 
+                                       value="{{ editing_endereco.city|default:'' }}" required
+                                       placeholder="Cidade">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="state" class="form-label">Estado *</label>
+                                <input type="text" id="state" name="state" class="form-input" 
+                                       value="{{ editing_endereco.state|default:'' }}" required
+                                       placeholder="Estado (UF)">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="postal_code" class="form-label">CEP *</label>
+                                <input type="text" id="postal_code" name="postal_code" class="form-input" 
+                                       value="{{ editing_endereco.postal_code|default:'' }}" required
+                                       placeholder="00000-000">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone_at_address" class="form-label">Telefone</label>
+                                <input type="text" id="phone_at_address" name="phone_at_address" class="form-input" 
+                                       value="{{ editing_endereco.phone_at_address|default:'' }}"
+                                       placeholder="(00) 00000-0000">
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" id="cancelAddressBtn" class="btn-form btn-form-cancel">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button type="submit" class="btn-form btn-form-save">
+                                <i class="fas fa-save"></i> 
+                                {% if editing_endereco %}
+                                    Atualizar Endereço
+                                {% else %}
+                                    Adicionar Endereço
+                                {% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Seção de Pedidos -->
+            <section class="orders-section" id="pedidos-tab" style="display: none;">
+                <h2 class="orders-section__title">
+                    <i class="fas fa-shopping-bag"></i> Histórico de Pedidos
+                </h2>
+                <p class="page-subtitle">Veja o histórico completo dos seus pedidos</p>
+                
+                {% if pedidos %}
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-history"></i> Todos os Pedidos
+                    </h3>
+                    <div class="filter-controls">
+                        <select class="filter-select" id="orderFilter">
+                            <option value="all">Todos os pedidos</option>
+                            <option value="pending">Pendentes</option>
+                            <option value="processing">Em processamento</option>
+                            <option value="shipped">Enviados</option>
+                            <option value="delivered">Entregues</option>
+                            <option value="cancelled">Cancelados</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="orders-list">
+                    {% for pedido in pedidos %}
+                    <article class="order-card">
+                        <div class="order-card__header">
+                            <div>
+                                <div class="order-card__id">Pedido #{{ pedido.id }}</div>
+                                <div class="order-card__date">Realizado em: {{ pedido.criado_em|date:"d/m/Y" }}</div>
+                            </div>
+                            <div class="order-card__status">
+                                <span class="status-badge status-badge--delivered">
+                                    <span class="status-badge__dot"></span>
+                                    Finalizado
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="order-card__content">
+                            <div class="order-card__product">
+                                <div class="order-card__product-img">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                <div class="order-card__product-info">
+                                    <h4>{{ pedido.itens.count }} itens no pedido</h4>
+                                    {% for item in pedido.itens.all|slice:":3" %}
+                                    <p>{{ item.produto.nome }} ({{ item.quantidade }}x)</p>
+                                    {% endfor %}
+                                    {% if pedido.itens.count > 3 %}
+                                    <p>+ {{ pedido.itens.count|add:"-3" }} mais itens</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="order-card__info">
+                                <span class="order-card__info-label">Valor Total</span>
+                                <span class="order-card__info-value">R$ {{ pedido.total|floatformat:2 }}</span>
+                            </div>
+
+                            <div class="order-card__info">
+                                <span class="order-card__info-label">Forma de Pagamento</span>
+                                <span class="order-card__info-value">{{ pedido.get_forma_pagamento_display|default:"Não especificada" }}</span>
+                            </div>
+
+                            <div class="order-card__info">
+                                <span class="order-card__info-label">Status</span>
+                                <span class="order-card__info-value">Finalizado</span>
+                            </div>
+                        </div>
+
+                        <div class="order-card__actions">
+                            <button class="btn btn-primary" onclick="viewOrderDetails('{{ pedido.id }}')">
+                                <i class="fas fa-eye"></i> Detalhes
+                            </button>
+                            <button class="btn btn-outline" onclick="reorderItems('{{ pedido.id }}')">
+                                <i class="fas fa-redo"></i> Comprar Novamente
+                            </button>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-shopping-bag fa-3x"></i>
+                    </div>
+                    <h3>Você ainda não fez nenhum pedido</h3>
+                    <p>Que tal explorar nossa loja e fazer sua primeira compra?</p>
+                    <a href="{% url 'nucleo:index' %}" class="btn btn-primary">
+                        <i class="fas fa-store"></i> Ir para a Loja
+                    </a>
+                </div>
+                {% endif %}
+            </section>
+        </main>
+    </div>
+</div>
+</div>
+<script>
+    // Navegação entre abas
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebarLinks = document.querySelectorAll('.sidebar__link');
+        const sidebarItems = document.querySelectorAll('.sidebar__item');
+        
+        // Get the main content container and sections
+        const mainContent = document.querySelector('main.main-content');
+        const securitySection = document.getElementById('seguranca-tab');
+        const addressSection = document.getElementById('endereco-tab');
+        const ordersSection = document.getElementById('pedidos-tab');
+        
+        // Get all the profile-related sections (everything except the security and address sections)
+        const profileSections = Array.from(mainContent.children).filter(element => 
+            element.id !== 'seguranca-tab' && 
+            element.id !== 'endereco-tab' &&
+            element.id !== 'pedidos-tab' &&
+            element.tagName.toLowerCase() !== 'script' && 
+            element.tagName.toLowerCase() !== 'style'
+        );
+        
+        // Initially hide the security, address and orders sections
+        if (securitySection) {
+            securitySection.style.display = 'none';
+        }
+        
+        if (addressSection) {
+            addressSection.style.display = 'none';
+        }
+        
+        if (ordersSection) {
+            ordersSection.style.display = 'none';
+        }
+        
+        // Check if we should show the security tab (e.g., after a password change)
+        const urlParams = new URLSearchParams(window.location.search);
+        const showSecurityTab = urlParams.get('tab') === 'seguranca';
+        const showOrdersTab = urlParams.get('tab') === 'pedidos';
+        
+        // If we should show the security tab, simulate clicking the security link
+        if (showSecurityTab && securitySection) {
+            // Find the security link in the sidebar
+            const securityLink = document.querySelector('a[href="#seguranca"]');
+            if (securityLink) {
+                // Trigger click event on the security link
+                securityLink.click();
+            }
+        }
+        
+        // If we should show the orders tab, simulate clicking the orders link
+        if (showOrdersTab && ordersSection) {
+            // Find the orders link in the sidebar
+            const ordersLink = document.querySelector('a[href="#pedidos"]');
+            if (ordersLink) {
+                // Trigger click event on the orders link
+                ordersLink.click();
+            }
+        }
+        
+        // Password toggle functionality
+        function setupPasswordToggle() {
+            const toggleButtons = document.querySelectorAll('.password-toggle');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            });
+        }
+        
+        // Password strength indicator
+        function setupPasswordStrength() {
+            const passwordInput = document.getElementById('new_password');
+            const strengthBar = document.querySelector('.strength-bar');
+            const strengthValue = document.getElementById('strength-value');
+            
+            if (passwordInput && strengthBar && strengthValue) {
+                passwordInput.addEventListener('input', function() {
+                    const password = this.value;
+                    let strength = 0;
+                    let strengthText = 'Fraca';
+                    let strengthColor = '#ef4444'; // danger red
+                    
+                    if (password.length >= 8) strength++;
+                    if (/[a-z]/.test(password)) strength++;
+                    if (/[A-Z]/.test(password)) strength++;
+                    if (/\d/.test(password)) strength++;
+                    if (/[^a-zA-Z\d]/.test(password)) strength++;
+                    
+                    const percentage = (strength / 5) * 100;
+                    
+                    // Update the width of the strength bar
+                    strengthBar.style.background = `linear-gradient(to right, ${strengthColor} ${percentage}%, #e5e7eb ${percentage}%)`;
+                    
+                    if (strength <= 2) {
+                        strengthText = 'Fraca';
+                        strengthColor = '#ef4444'; // danger red
+                    } else if (strength <= 4) {
+                        strengthText = 'Média';
+                        strengthColor = '#f59e0b'; // warning yellow
+                    } else {
+                        strengthText = 'Forte';
+                        strengthColor = '#10b981'; // success green
+                    }
+                    
+                    strengthValue.textContent = strengthText;
+                });
+            }
+        }
+        
+        // Password confirmation match
+        function setupPasswordMatch() {
+            const newPasswordInput = document.getElementById('new_password');
+            const confirmPasswordInput = document.getElementById('confirm_password');
+            const passwordMatch = document.getElementById('password-match');
+            
+            if (newPasswordInput && confirmPasswordInput && passwordMatch) {
+                function checkPasswordMatch() {
+                    if (confirmPasswordInput.value !== '') {
+                        if (newPasswordInput.value === confirmPasswordInput.value) {
+                            passwordMatch.classList.add('show');
+                            passwordMatch.innerHTML = '<i class="fas fa-check-circle"></i> As senhas coincidem';
+                            passwordMatch.style.color = '#10b981'; // success green
+                        } else {
+                            passwordMatch.classList.add('show');
+                            passwordMatch.innerHTML = '<i class="fas fa-times-circle"></i> As senhas não coincidem';
+                            passwordMatch.style.color = '#ef4444'; // danger red
+                        }
+                    } else {
+                        passwordMatch.classList.remove('show');
+                    }
+                }
+                
+                newPasswordInput.addEventListener('input', checkPasswordMatch);
+                confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+            }
+        }
+        
+        // Initialize interactive elements when security tab is shown
+        function initSecurityTab() {
+            setupPasswordToggle();
+            setupPasswordStrength();
+            setupPasswordMatch();
+        }
+        
+        // Initialize interactive elements when address tab is shown
+        function initAddressTab() {
+            // Add event listeners for address form
+            const addAddressBtn = document.getElementById('addAddressBtn');
+            const cancelAddressBtn = document.getElementById('cancelAddressBtn');
+            const addressFormContainer = document.getElementById('addressFormContainer');
+            
+            if (addAddressBtn && cancelAddressBtn && addressFormContainer) {
+                addAddressBtn.addEventListener('click', function() {
+                    addressFormContainer.classList.add('active');
+                    // Scroll to form
+                    addressFormContainer.scrollIntoView({ behavior: 'smooth' });
+                });
+                
+                cancelAddressBtn.addEventListener('click', function() {
+                    addressFormContainer.classList.remove('active');
+                });
+            }
+        }
+        
+        // Initialize interactive elements when orders tab is shown
+        function initOrdersTab() {
+            // Add event listeners for order filtering
+            const filterSelect = document.getElementById('orderFilter');
+            if (filterSelect) {
+                filterSelect.addEventListener('change', function() {
+                    const filterValue = this.value;
+                    const orders = document.querySelectorAll('.order-card');
+                    
+                    orders.forEach(order => {
+                        const statusElement = order.querySelector('.status-badge');
+                        const statusText = statusElement.textContent.toLowerCase();
+                        
+                        let shouldShow = false;
+                        
+                        switch(filterValue) {
+                            case 'all':
+                                shouldShow = true;
+                                break;
+                            case 'pending':
+                                shouldShow = statusText.includes('pendente');
+                                break;
+                            case 'processing':
+                                shouldShow = statusText.includes('processamento');
+                                break;
+                            case 'shipped':
+                                shouldShow = statusText.includes('enviado');
+                                break;
+                            case 'delivered':
+                                shouldShow = statusText.includes('entregue');
+                                break;
+                            case 'cancelled':
+                                shouldShow = statusText.includes('cancelado');
+                                break;
+                            default:
+                                shouldShow = true;
+                        }
+                        
+                        order.style.display = shouldShow ? 'block' : 'none';
+                    });
+                });
+            }
+        }
+        
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all items
+                sidebarItems.forEach(item => {
+                    item.classList.remove('sidebar__item--active');
+                });
+                
+                // Add active class to clicked item
+                const parentItem = this.closest('.sidebar__item');
+                parentItem.classList.add('sidebar__item--active');
+                
+                // Get section name
+                const sectionName = this.getAttribute('href').substring(1);
+                console.log(`Navegando para a seção: ${sectionName}`);
+                
+                // Show/hide content sections based on the selected tab
+                if (sectionName === 'seguranca' && securitySection) {
+                    // Hide all profile sections
+                    profileSections.forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    // Hide address section if visible
+                    if (addressSection) {
+                        addressSection.style.display = 'none';
+                    }
+                    // Hide orders section if visible
+                    if (ordersSection) {
+                        ordersSection.style.display = 'none';
+                    }
+                    // Show security section
+                    securitySection.style.display = 'block';
+                } else if (sectionName === 'endereco' && addressSection) {
+                    // Hide all profile sections
+                    profileSections.forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    // Hide security section if visible
+                    if (securitySection) {
+                        securitySection.style.display = 'none';
+                    }
+                    // Hide orders section if visible
+                    if (ordersSection) {
+                        ordersSection.style.display = 'none';
+                    }
+                    // Show address section
+                    addressSection.style.display = 'block';
+                } else if (sectionName === 'pedidos' && ordersSection) {
+                    // Hide all profile sections
+                    profileSections.forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    // Hide security section if visible
+                    if (securitySection) {
+                        securitySection.style.display = 'none';
+                    }
+                    // Hide address section if visible
+                    if (addressSection) {
+                        addressSection.style.display = 'none';
+                    }
+                    // Show orders section
+                    ordersSection.style.display = 'block';
+                } else {
+                    // Show all profile sections
+                    profileSections.forEach(section => {
+                        section.style.display = 'block';
+                    });
+                    // Hide security section
+                    if (securitySection) {
+                        securitySection.style.display = 'none';
+                    }
+                    // Hide address section
+                    if (addressSection) {
+                        addressSection.style.display = 'none';
+                    }
+                    // Hide orders section
+                    if (ordersSection) {
+                        ordersSection.style.display = 'none';
+                    }
+                }
+                
+                // Update page title
+                const sectionTitles = {
+                    'perfil': 'Configurações do Perfil',
+                    'seguranca': 'Segurança da Conta',
+                    'endereco': 'Endereços de Entrega',
+                    'pedidos': 'Histórico de Pedidos',
+                    'suporte': 'Suporte ao Cliente'
+                };
+                
+                if (sectionTitles[sectionName]) {
+                    document.querySelector('.content-title').textContent = sectionTitles[sectionName];
+                    // Update subtitle too
+                    const subtitle = document.querySelector('.page-subtitle');
+                    if (subtitle) {
+                        switch(sectionName) {
+                            case 'perfil':
+                                subtitle.textContent = 'Informações básicas do seu perfil';
+                                break;
+                            case 'seguranca':
+                                subtitle.textContent = 'Gerencie sua senha e veja suas sessões ativas';
+                                break;
+                            case 'endereco':
+                                subtitle.textContent = 'Gerencie seus endereços de entrega';
+                                break;
+                            case 'pedidos':
+                                subtitle.textContent = 'Veja o histórico completo dos seus pedidos';
+                                break;
+                            case 'suporte':
+                                subtitle.textContent = 'Entre em contato com nossa equipe de suporte';
+                                break;
+                        }
+                    }
+                }
+                
+                // Initialize tab functionality if needed
+                if (sectionName === 'seguranca') {
+                    setTimeout(initSecurityTab, 100);
+                } else if (sectionName === 'endereco') {
+                    setTimeout(initAddressTab, 100);
+                } else if (sectionName === 'pedidos') {
+                    setTimeout(initOrdersTab, 100);
+                }
+                
+                // Update URL to reflect the current tab without reloading the page
+                if (history.pushState) {
+                    const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?tab=' + sectionName;
+                    window.history.pushState({path:newUrl},'',newUrl);
+                }
+            });
+        });
+        
+        // Also check for messages and show the security tab if needed
+        // This handles cases where we want to show the security tab after a form submission
+        const messages = document.querySelectorAll('.messages .alert');
+        if (messages.length > 0) {
+            // Check if any message is related to password change
+            let showSecurity = false;
+            messages.forEach(message => {
+                const text = message.textContent.toLowerCase();
+                if (text.includes('senha') || text.includes('password')) {
+                    showSecurity = true;
+                }
+            });
+            
+            if (showSecurity && securitySection) {
+                // Find the security link in the sidebar
+                const securityLink = document.querySelector('a[href="#seguranca"]');
+                if (securityLink) {
+                    // Trigger click event on the security link
+                    securityLink.click();
+                }
+            }
+        }
+        
+        // Avatar upload functionality
+        const changeAvatarBtn = document.getElementById('changeAvatarBtn');
+        const removeAvatarBtn = document.getElementById('removeAvatarBtn');
+        const avatarInput = document.getElementById('avatarInput');
+        
+        if (changeAvatarBtn && avatarInput) {
+            changeAvatarBtn.addEventListener('click', function() {
+                avatarInput.click();
+            });
+            
+            avatarInput.addEventListener('change', function(event) {
+                if (event.target.files && event.target.files[0]) {
+                    const file = event.target.files[0];
+                    
+                    // Validate file type
+                    const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+                    if (!validTypes.includes(file.type)) {
+                        alert('Formato de arquivo inválido. Apenas PNG, JPG e JPEG são permitidos.');
+                        return;
+                    }
+                    
+                    // Validate file size (5MB max)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('Arquivo muito grande. O tamanho máximo permitido é 5MB.');
+                        return;
+                    }
+                    
+                    // Create FormData and send via AJAX
+                    const formData = new FormData();
+                    formData.append('avatar', file);
+                    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+                    
+                    // Show loading indicator
+                    changeAvatarBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                    changeAvatarBtn.disabled = true;
+                    
+                    // Send AJAX request
+                    fetch('{% url "usuario:upload_avatar" %}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update avatar image
+                            const avatarImg = document.querySelector('.profile-avatar-img');
+                            const avatarIcon = document.querySelector('.avatar-icon');
+                            const avatarCircle = document.querySelector('.avatar-circle');
+                            
+                            if (avatarImg) {
+                                avatarImg.src = data.avatar_url;
+                            } else if (avatarIcon) {
+                                // Replace icon with image
+                                const img = document.createElement('img');
+                                img.src = data.avatar_url;
+                                img.alt = "Foto de perfil";
+                                img.className = "profile-avatar-img";
+                                avatarCircle.replaceChild(img, avatarIcon);
+                                
+                                // Add remove button if it doesn't exist
+                                if (!removeAvatarBtn) {
+                                    const removeBtn = document.createElement('button');
+                                    removeBtn.className = "btn btn-danger";
+                                    removeBtn.id = "removeAvatarBtn";
+                                    removeBtn.innerHTML = '<i class="fas fa-trash"></i> Remover';
+                                    document.querySelector('.avatar-actions').appendChild(removeBtn);
+                                    
+                                    // Add event listener to the new button
+                                    removeBtn.addEventListener('click', function() {
+                                        removeAvatar();
+                                    });
+                                }
+                            }
+                            
+                            // Show success message
+                            alert(data.message);
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Erro ao enviar o avatar. Por favor, tente novamente.');
+                    })
+                    .finally(() => {
+                        // Reset button
+                        changeAvatarBtn.innerHTML = '<i class="fas fa-camera"></i> Mudar Foto';
+                        changeAvatarBtn.disabled = false;
+                        // Clear input
+                        avatarInput.value = '';
+                    });
+                }
+            });
+        }
+        
+        // Remove avatar functionality
+        if (removeAvatarBtn) {
+            removeAvatarBtn.addEventListener('click', function() {
+                removeAvatar();
+            });
+        }
+        
+        function removeAvatar() {
+            if (confirm('Tem certeza que deseja remover sua foto de perfil?')) {
+                fetch('{% url "usuario:upload_avatar" %}', {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Replace image with icon
+                        const avatarImg = document.querySelector('.profile-avatar-img');
+                        const avatarCircle = document.querySelector('.avatar-circle');
+                        
+                        if (avatarImg) {
+                            const icon = document.createElement('i');
+                            icon.className = "fas fa-user avatar-icon";
+                            avatarCircle.replaceChild(icon, avatarImg);
+                        }
+                        
+                        // Remove the remove button
+                        if (removeAvatarBtn) {
+                            removeAvatarBtn.remove();
+                        }
+                        
+                        // Show success message
+                        alert(data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Erro ao remover o avatar. Por favor, tente novamente.');
+                });
+            }
+        }
+    });
+    
+    // Funções para manipulação dos pedidos
+    function viewOrderDetails(orderId) {
+        // Navigate to the order detail page
+        window.location.href = '/usuario/pedido/' + orderId + '/';
+    }
+    
+    function reorderItems(orderId) {
+        alert(`Adicionando itens do pedido #${orderId} ao carrinho`);
+        // Aqui você adicionaria a lógica para adicionar os itens ao carrinho
+    }
+</script>{% endblock %}

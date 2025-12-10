@@ -1,0 +1,160 @@
+{% extends 'nucleo/base.html' %}
+
+{% block title %}Gerenciar Produtos - NerdHub{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style_perfil_novo.css' %}">
+
+<div class="container mx-auto px-6 py-8 min-h-screen">
+    <div class="mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl text-white font-bold mb-2">Gerenciamento de Produtos</h1>
+                <p class="text-gray-400">Administre todos os produtos do catálogo</p>
+            </div>
+            <a href="{% url 'nucleo:admin_produto_adicionar' %}" class="bg-primary text-white px-6 py-3 rounded-button whitespace-nowrap hover:bg-teal-600 transition-colors font-medium">
+                <i class="ri-add-line"></i> Adicionar Produto
+            </a>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="glass-effect p-6 mb-6">
+        <div class="grid grid-cols-3 gap-4">
+            <div>
+                <label class="block text-white text-sm font-medium mb-2">Buscar por Nome</label>
+                <input type="text" id="searchInput" placeholder="Digite o nome do produto..." class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+            </div>
+            <div>
+                <label class="block text-white text-sm font-medium mb-2">Filtrar por Marca</label>
+                <select id="marcaFilter" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="">Todas as marcas</option>
+                    {% for marca in marcas %}
+                    <option value="{{ marca.id }}">{{ marca.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-white text-sm font-medium mb-2">Filtrar por Categoria</label>
+                <select id="categoriaFilter" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="">Todas as categorias</option>
+                    {% for categoria in categorias %}
+                    <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Produtos -->
+    <div class="glass-effect p-6">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-gray-600">
+                        <th class="text-left text-white font-semibold py-3 px-4">Imagem</th>
+                        <th class="text-left text-white font-semibold py-3 px-4">Nome</th>
+                        <th class="text-left text-white font-semibold py-3 px-4">Marca</th>
+                        <th class="text-left text-white font-semibold py-3 px-4">Categoria</th>
+                        <th class="text-left text-white font-semibold py-3 px-4">Preço</th>
+                        <th class="text-left text-white font-semibold py-3 px-4">Estoque</th>
+                        <th class="text-left text-white font-semibold py-3 px-4">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody">
+                    {% for produto in produtos %}
+                    <tr class="border-b border-gray-700 hover:bg-gray-700 transition-colors product-row" 
+                        data-nome="{{ produto.nome|lower }}" 
+                        data-marca="{{ produto.marca.id|default:'' }}" 
+                        data-categoria="{{ produto.categoria.id|default:'' }}">
+                        <td class="py-4 px-4">
+                            <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="w-16 h-16 object-cover rounded-lg">
+                        </td>
+                        <td class="py-4 px-4">
+                            <p class="text-white font-medium">{{ produto.nome }}</p>
+                            <p class="text-gray-400 text-sm">ID: {{ produto.id }}</p>
+                        </td>
+                        <td class="py-4 px-4 text-gray-300">
+                            {{ produto.marca.nome|default:"Sem marca" }}
+                        </td>
+                        <td class="py-4 px-4 text-gray-300">
+                            {{ produto.categoria.nome|default:"Sem categoria" }}
+                        </td>
+                        <td class="py-4 px-4 text-white font-semibold">
+                            R$ {{ produto.preco }}
+                        </td>
+                        <td class="py-4 px-4">
+                            {% if produto.estoque %}
+                                <span class="{% if produto.estoque.quantidade > 10 %}text-green-400{% elif produto.estoque.quantidade > 0 %}text-yellow-400{% else %}text-red-400{% endif %}">
+                                    {{ produto.estoque.quantidade }} un.
+                                </span>
+                            {% else %}
+                                <span class="text-gray-400">Não controlado</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-4 px-4">
+                            <div class="flex space-x-2">
+                                <a href="{% url 'nucleo:admin_produto_editar' produto.id %}" class="bg-secondary text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm">
+                                    <i class="ri-edit-line"></i> Editar
+                                </a>
+                                <form method="POST" action="{% url 'nucleo:admin_produto_remover' produto.id %}" onsubmit="return confirm('Tem certeza que deseja remover este produto?');" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm">
+                                        <i class="ri-delete-bin-line"></i> Remover
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="py-8 text-center text-gray-400">
+                            Nenhum produto cadastrado. Clique em "Adicionar Produto" para começar.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Filtro de busca
+    document.getElementById('searchInput').addEventListener('input', function() {
+        filterProducts();
+    });
+    
+    document.getElementById('marcaFilter').addEventListener('change', function() {
+        filterProducts();
+    });
+    
+    document.getElementById('categoriaFilter').addEventListener('change', function() {
+        filterProducts();
+    });
+    
+    function filterProducts() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const marcaFilter = document.getElementById('marcaFilter').value;
+        const categoriaFilter = document.getElementById('categoriaFilter').value;
+        const rows = document.querySelectorAll('.product-row');
+        
+        rows.forEach(row => {
+            const nome = row.getAttribute('data-nome');
+            const marca = row.getAttribute('data-marca');
+            const categoria = row.getAttribute('data-categoria');
+            
+            const matchesSearch = nome.includes(searchTerm);
+            const matchesMarca = !marcaFilter || marca === marcaFilter;
+            const matchesCategoria = !categoriaFilter || categoria === categoriaFilter;
+            
+            if (matchesSearch && matchesMarca && matchesCategoria) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+</script>
+{% endblock %}

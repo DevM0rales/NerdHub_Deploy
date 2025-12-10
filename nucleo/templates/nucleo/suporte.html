@@ -1,0 +1,431 @@
+{% extends 'nucleo/base.html' %}
+{% load static %}
+{% block title %}Suporte - NerdHub{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style_suporte.css' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<!-- Conteúdo Principal -->
+<div class="main-content">
+    <div class="support-container">
+        <!-- Área Principal do Chat -->
+        <div class="support-content">
+            <!-- Cabeçalho do Chat -->
+            <div class="chat-header-section">
+                <div class="header-content">
+                    <h1 class="chat-title">Chat de Suporte</h1>
+                    <div class="chat-status">
+                        <span class="status-indicator online"></span>
+                        <span class="status-text" id="status-text">Online - Resposta em poucos minutos</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel de Conteúdo -->
+            <div class="support-panel">
+                <!-- Seção de Informações -->
+                <section class="info-section" aria-labelledby="welcome-heading">
+                    <div class="welcome-message">
+                        <h2 id="welcome-heading" class="welcome-title">
+                            Bem-vindo ao Chat de Suporte Simplificado
+                        </h2>
+                        <p class="welcome-text">
+                            Olá! Sou o assistente virtual do Nerd Hub.
+                            Estamos aqui para te ajudar a aproveitar ao máximo sua experiência em suas compras!
+                        </p>
+                    </div>
+
+                    <div class="instructions-section">
+                        <h3 class="instructions-title">Para iniciar o atendimento:</h3>
+                        <ol class="instructions-list">
+                            <li class="instruction-item">
+                                <strong>Escolha o tema da sua dúvida:</strong>
+                                <ul class="sub-instructions">
+                                    <li>
+                                        <i class="fas fa-user-plus"></i>
+                                        <strong>Criar conta/acessar:</strong> Dúvidas sobre login, criação de conta e acesso à plataforma.
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-compass"></i>
+                                        <strong>Navegar:</strong> Encontrar produtos, gerenciar sua conta e usar os recursos da plataforma.
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-tools"></i>
+                                        <strong>Solucionar problemas:</strong> Erros, falhas e problemas técnicos.
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-headset"></i>
+                                        <strong>Falar com especialista:</strong> Converse com um agente em tempo real.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="instruction-item">
+                                <strong>Siga as instruções do chatbot:</strong> Responda às perguntas e forneça as informações solicitadas.
+                            </li>
+                            <li class="instruction-item">
+                                <strong>Aguarde o atendimento:</strong> Se necessário, um agente entrará em contato com você.
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="helpful-links">
+                        <h3 class="links-title">
+                            <i class="fas fa-lightbulb"></i>
+                            Lembre-se:
+                        </h3>
+                        <ul class="links-list">
+                            <li>
+                                <i class="fas fa-question-circle"></i>
+                                Consulte nossa Central de Ajuda: 
+                                <a href="https://ajuda.nerdhub.com.br" class="help-link" target="_blank" rel="noopener">
+                                    ajuda.nerdhub.com.br
+                                </a>
+                            </li>
+                            <li>
+                                <i class="fas fa-wifi"></i>
+                                Verifique sua conexão com a internet.
+                            </li>
+                            <li>
+                                <i class="fas fa-sync-alt"></i>
+                                Tente atualizar o navegador ou aplicativo.
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                Em caso de dúvidas: 
+                                <a href="mailto:suporte@nerdhub.com.br" class="help-link">suporte@nerdhub.com.br</a>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Seção do Chat -->
+                <section class="chat-section" aria-labelledby="chat-heading">
+                    <div class="chat-container">
+                        <!-- Cabeçalho do Chat -->
+                        <div class="chat-header">
+                            <div class="chat-info">
+                                <div class="chat-avatar">
+                                    <i class="fas fa-headset avatar-icon"></i>
+                                </div>
+                                <div class="chat-details">
+                                    <h3 id="chat-heading" class="chat-agent">Suporte Nerd Hub</h3>
+                                    <p class="chat-status">Online agora</p>
+                                </div>
+                            </div>
+                            <div class="chat-actions">
+                                <button class="chat-action-btn" id="end-chat-btn" aria-label="Encerrar chat">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <button class="chat-action-btn" id="minimize-btn" aria-label="Minimizar chat">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Área de Mensagens -->
+                        <div class="messages-area" id="messages-area">
+                            <!-- Mensagem do Sistema -->
+                            <div class="message system">
+                                <div class="message-content">
+                                    <p>
+                                        Olá! Sou o assistente virtual do Nerd Hub. 
+                                        Como posso ajudá-lo hoje?
+                                    </p>
+                                </div>
+                                <div class="message-time" id="system-time">14:30</div>
+                            </div>
+
+                            <!-- Indicador de digitação -->
+                            <div class="typing-indicator" id="typing-indicator">
+                                <div class="typing-dots">
+                                    <span class="typing-dot"></span>
+                                    <span class="typing-dot"></span>
+                                    <span class="typing-dot"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Área de Digitação -->
+                        <div class="input-container">
+                            <div class="input-actions">
+                            </div>
+                            
+                            <div class="message-input-wrapper">
+                                <input 
+                                    type="text" 
+                                    class="message-input" 
+                                    id="message-input"
+                                    placeholder="Digite sua mensagem..."
+                                    aria-label="Digite sua mensagem"
+                                />
+                                <button class="send-button" id="send-btn" aria-label="Enviar mensagem">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Dicas Rápidas -->
+            <div class="quick-tips">
+                <h3 class="tips-title">
+                    <i class="fas fa-bolt"></i>
+                    Dicas Rápidas
+                </h3>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <i class="fas fa-clock tip-icon"></i>
+                        <h4 class="tip-title">24/7</h4>
+                        <p class="tip-text">Atendimento 24 horas</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-history tip-icon"></i>
+                        <h4 class="tip-title">Ajuda</h4>
+                        <p class="tip-text">Sempre a postos</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-shield-alt tip-icon"></i>
+                        <h4 class="tip-title">Seguro</h4>
+                        <p class="tip-text">Dados protegidos</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-user-friends tip-icon"></i>
+                        <h4 class="tip-title">Humano</h4>
+                        <p class="tip-text">Atendente real</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript Completo -->
+<script>
+    // ============================================
+    // CONFIGURAÇÕES
+    // ============================================
+    const chatConfig = {
+        botName: "Assistente Nerd Hub",
+        botResponses: {
+            account: "Entendi que você tem dúvidas sobre sua conta. Posso ajudar com login, cadastro ou recuperação de senha.",
+            orders: "Para questões sobre pedidos, preciso do número do pedido. Tem ele em mãos?",
+            products: "Tem alguma dúvida específica sobre algum produto? Pode me informar o nome ou código?",
+            technical: "Descreva o problema técnico que está enfrentando para que eu possa ajudar.",
+            default: "Entendi sua mensagem. Em breve um de nossos atendentes irá responder."
+        },
+        responseDelay: 1500
+    };
+
+    // ============================================
+    // ESTADO DO CHAT
+    // ============================================
+    let chatState = {
+        isActive: true,
+        currentTopic: null,
+        messages: []
+    };
+
+    // ============================================
+    // FUNÇÕES UTILITÁRIAS
+    // ============================================
+    function getCurrentTime() {
+        const now = new Date();
+        return now.toLocaleTimeString('pt-BR', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+    }
+
+    function updateSystemTime() {
+        const timeElement = document.getElementById('system-time');
+        if (timeElement) {
+            timeElement.textContent = getCurrentTime();
+        }
+    }
+
+    // ============================================
+    // FUNÇÕES DO CHAT
+    // ============================================
+    function showTypingIndicator() {
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) {
+            indicator.classList.add('active');
+        }
+    }
+
+    function hideTypingIndicator() {
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) {
+            indicator.classList.remove('active');
+        }
+    }
+
+    function addMessage(text, sender = 'user') {
+        const messagesArea = document.getElementById('messages-area');
+        if (!messagesArea) return;
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        
+        const time = getCurrentTime();
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <p>${text}</p>
+            </div>
+            <div class="message-time">${time}</div>
+        `;
+
+        messagesArea.appendChild(messageDiv);
+        
+        // Scroll para baixo
+        messagesArea.scrollTop = messagesArea.scrollHeight;
+        
+        // Salvar no histórico
+        chatState.messages.push({
+            text,
+            sender,
+            time
+        });
+    }
+
+    function getBotResponse(topic) {
+        return chatConfig.botResponses[topic] || chatConfig.botResponses.default;
+    }
+
+    async function sendMessage(message, topic = null) {
+        if (!chatState.isActive) return;
+        
+        // Adicionar mensagem do usuário
+        addMessage(message, 'user');
+        
+        // Determinar tópico
+        if (topic) {
+            chatState.currentTopic = topic;
+        }
+        
+        // Mostrar indicador de digitação
+        showTypingIndicator();
+        
+        // Aguardar e responder
+        setTimeout(() => {
+            hideTypingIndicator();
+            
+            const response = getBotResponse(chatState.currentTopic);
+            addMessage(response, 'bot');
+            
+            // Atualizar status se for primeira interação
+            if (chatState.messages.length === 2) {
+                updateStatusText("Analisando sua dúvida...");
+            }
+        }, chatConfig.responseDelay);
+    }
+
+    // ============================================
+    // CONTROLES DA INTERFACE
+    // ============================================
+    function updateStatusText(text) {
+        const statusElement = document.getElementById('status-text');
+        if (statusElement) {
+            statusElement.textContent = text;
+        }
+    }
+
+    function endChat() {
+        chatState.isActive = false;
+        updateStatusText("Chat encerrado");
+        
+        // Adicionar mensagem de encerramento
+        addMessage("Chat encerrado. Obrigado por entrar em contato com o Nerd Hub!", 'system');
+        
+        // Desabilitar inputs
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        if (messageInput) messageInput.disabled = true;
+        if (sendBtn) sendBtn.disabled = true;
+    }
+
+    function showConfirmModal(message, callback) {
+        if (confirm(message)) {
+            if (typeof callback === 'function') {
+                callback();
+            }
+        }
+    }
+
+    // ============================================
+    // EVENT LISTENERS
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
+        // Atualizar hora do sistema
+        updateSystemTime();
+        setInterval(updateSystemTime, 60000); // Atualizar a cada minuto
+
+        // Envio de mensagem
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        
+        function handleSendMessage() {
+            if (!messageInput || !messageInput.value.trim()) return;
+            
+            const message = messageInput.value.trim();
+            sendMessage(message);
+            messageInput.value = '';
+            messageInput.focus();
+        }
+        
+        if (sendBtn) {
+            sendBtn.addEventListener('click', handleSendMessage);
+        }
+        
+        if (messageInput) {
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSendMessage();
+                }
+            });
+        }
+
+        // Botão de encerrar chat
+        const endChatBtn = document.getElementById('end-chat-btn');
+        if (endChatBtn) {
+            endChatBtn.addEventListener('click', () => {
+                showConfirmModal('Tem certeza que deseja encerrar o chat?', endChat);
+            });
+        }
+
+        // Botão de minimizar
+        const minimizeBtn = document.getElementById('minimize-btn');
+        if (minimizeBtn) {
+            minimizeBtn.addEventListener('click', () => {
+                const chatSection = document.querySelector('.chat-section');
+                if (chatSection) {
+                    chatSection.classList.toggle('minimized');
+                    const icon = minimizeBtn.querySelector('i');
+                    if (icon.classList.contains('fa-minus')) {
+                        icon.classList.replace('fa-minus', 'fa-plus');
+                    } else {
+                        icon.classList.replace('fa-plus', 'fa-minus');
+                    }
+                }
+            });
+        }
+
+        // Auto-focus no input
+        if (messageInput) {
+            setTimeout(() => {
+                messageInput.focus();
+            }, 1000);
+        }
+
+        console.log('Chat de Suporte Nerd Hub inicializado!');
+    });
+</script>
+{% endblock %}

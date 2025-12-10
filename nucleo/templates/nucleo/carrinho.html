@@ -1,0 +1,287 @@
+{% extends 'nucleo/base.html' %}
+
+{% block title %}Meu Carrinho - NerdHub{% endblock %}
+
+{% block content %}
+{% load static %}
+<!-- Carregar CSS específico do carrinho -->
+<link rel="stylesheet" href="{% static 'css/style_carrinho.css' %}">
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+    <!-- Layout responsivo -->
+    <div class="cart-grid">
+        <!-- Coluna esquerda - Itens do carrinho -->
+        <section class="cart-items-section">
+            <div class="section-header">
+                <h1 class="section-title">Meu Carrinho</h1>
+                {% if itens_com_total %}
+                <span class="items-count">{{ itens_com_total|length }} {% if itens_com_total|length == 1 %}item{% else %}itens{% endif %}</span>
+                {% endif %}
+            </div>
+            
+            {% if itens_com_total %}
+            <div class="cart-items-list">
+                <!-- Iterar por cada item no carrinho -->
+                {% for item_com_total in itens_com_total %}
+                <article class="cart-item">
+                    <div class="item-media">
+                        {% if item_com_total.item.produto.imagem_principal %}
+                        <img src="{{ item_com_total.item.produto.imagem_principal.url }}" 
+                             alt="{{ item_com_total.item.produto.nome }}" class="item-image">
+                        {% else %}
+                        <div class="item-image" style="background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-image" style="font-size: 2rem; color: #ccc;" aria-hidden="true"></i>
+                            <span class="sr-only">Imagem não disponível</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="item-content">
+                        <h3 class="item-title">{{ item_com_total.item.produto.nome }}</h3>
+                        <div class="item-meta">
+                            {% if item_com_total.item.produto.marca %}
+                            <span class="item-brand-name">{{ item_com_total.item.produto.marca.nome }}</span>
+                            {% endif %}
+                            <div class="item-price">R$ {{ item_com_total.item.produto.preco|floatformat:2 }}</div>
+                        </div>
+                        <div class="item-quantity">
+                            <span class="quantity-label">Quantidade:</span>
+                            <div class="quantity-control">
+                                <form method="post" action="{% url 'nucleo:alterar_quantidade_carrinho' item_com_total.item.id %}" class="qty-form" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="acao" value="diminuir">
+                                    <button type="submit" class="qty-btn minus {% if item_com_total.item.quantidade <= 1 %}disabled{% endif %}" 
+                                            aria-label="Diminuir quantidade" 
+                                            {% if item_com_total.item.quantidade <= 1 %}disabled{% endif %}>
+                                        <i class="fas fa-minus" aria-hidden="true"></i>
+                                    </button>
+                                </form>
+                                <span class="qty-value">{{ item_com_total.item.quantidade }}</span>
+                                <form method="post" action="{% url 'nucleo:alterar_quantidade_carrinho' item_com_total.item.id %}" class="qty-form" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="acao" value="aumentar">
+                                    <button type="submit" class="qty-btn plus" aria-label="Aumentar quantidade">
+                                        <i class="fas fa-plus" aria-hidden="true"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="{% url 'nucleo:remover_item_carrinho' item_com_total.item.id %}" 
+                       class="item-remove-btn" aria-label="Remover {{ item_com_total.item.produto.nome }} do carrinho">
+                        <i class="fas fa-trash" aria-hidden="true"></i>
+                        <span>Remover</span>
+                    </a>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <!-- ============================================ -->
+            <!-- CARRINHO VAZIO -->
+            <!-- ============================================ -->
+            <div class="carrinho-vazio">
+                <p>Seu carrinho está vazio 😢</p>
+                <a href="{% url 'nucleo:index' %}" class="btn-voltar">Voltar para a loja</a>
+            </div>
+            {% endif %}
+        </section>
+
+        {% if itens_com_total %}
+        <!-- Coluna direita - Resumo do pedido -->
+        <div class="sidebar">
+            <section class="resumo-card">
+                <h3>Resumo do Pedido</h3>
+                
+                <!-- Total geral -->
+                <div class="resumo-linha">
+                    <span>Total:</span>
+                    <span class="resumo-total">R$ {{ total|floatformat:2 }}</span>
+                </div>
+                
+                <!-- Botões de ação -->
+                <a href="{% url 'nucleo:checkout' %}" class="btn-finalizar">Finalizar Pedido</a>
+                <a href="{% url 'nucleo:index' %}" class="btn-continuar">Continuar Comprando</a>
+            </section>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Seção de sugestões de produtos -->
+    {% if produtos_sugeridos %}
+    <section class="similar-products" style="margin-top: var(--space-xl);">
+        <div class="section-header">
+            <h2 class="section-title">Você também pode gostar</h2>
+        </div>
+        
+        <div class="products-container">
+            <div class="products-grid">
+                <!-- Produtos sugeridos do banco de dados -->
+                {% for produto in produtos_sugeridos %}
+                <div class="product-card">
+                    {% if produto.desconto_percentual %}
+                    <div class="product-badge">{{ produto.desconto_percentual }}% OFF</div>
+                    {% endif %}
+                    <div class="product-image-container">
+                        {% if produto.imagem_principal %}
+                        <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="product-image">
+                        {% else %}
+                        <div class="product-image" style="background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; height: 100%;">
+                            <i class="fas fa-image" style="font-size: 3rem; color: #ccc;" aria-hidden="true"></i>
+                            <span class="sr-only">Imagem não disponível</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ produto.nome }}</h3>
+                        <div class="product-pricing">
+                            {% if produto.preco_desconto %}
+                            <span class="old-price">R$ {{ produto.preco|floatformat:2 }}</span>
+                            <span class="current-price">R$ {{ produto.preco_desconto|floatformat:2 }}</span>
+                            {% else %}
+                            <span class="current-price">R$ {{ produto.preco|floatformat:2 }}</span>
+                            {% endif %}
+                        </div>
+                        <form method="post" action="{% url 'nucleo:adicionar_ao_carrinho' produto.id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="add-to-cart-btn" data-produto-id="{{ produto.id }}">
+                                <i class="fas fa-plus" aria-hidden="true"></i>
+                                Adicionar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+</div>
+
+<script>
+    // Adicionar animação de remoção
+    document.querySelectorAll('.item-remove-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const cartItem = this.closest('.cart-item');
+            const href = this.getAttribute('href');
+            
+            cartItem.style.transform = 'translateX(100%)';
+            cartItem.style.opacity = '0';
+            
+            setTimeout(() => {
+                window.location.href = href;
+            }, 300);
+        });
+    });
+    
+    // Handle quantity form submissions
+    document.querySelectorAll('.qty-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const action = this.querySelector('input[name="acao"]').value;
+            const qtyValue = this.closest('.quantity-control').querySelector('.qty-value');
+            let currentQty = parseInt(qtyValue.textContent);
+            
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalHTML = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            submitBtn.disabled = true;
+            
+            // Submit form via AJAX
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Update quantity display
+                    if (action === 'aumentar') {
+                        currentQty++;
+                    } else if (action === 'diminuir' && currentQty > 1) {
+                        currentQty--;
+                    }
+                    qtyValue.textContent = currentQty;
+                    
+                    // Update button states
+                    const minusBtn = this.closest('.quantity-control').querySelector('.minus');
+                    if (currentQty <= 1) {
+                        minusBtn.disabled = true;
+                        minusBtn.classList.add('disabled');
+                    } else {
+                        minusBtn.disabled = false;
+                        minusBtn.classList.remove('disabled');
+                    }
+                    
+                    // Reload page to update totals
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                } else {
+                    throw new Error('Failed to update quantity');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                submitBtn.innerHTML = originalHTML;
+                submitBtn.disabled = false;
+                alert('Erro ao atualizar a quantidade. Por favor, tente novamente.');
+            });
+        });
+    });
+    
+    // Adicionar ao carrinho (para produtos sugeridos)
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('form');
+            const originalText = this.innerHTML;
+            
+            // Show loading state
+            this.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Adicionando...';
+            this.disabled = true;
+            
+            // Submit form via AJAX
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    this.innerHTML = '<i class="fas fa-check" aria-hidden="true"></i> Adicionado!';
+                    this.style.backgroundColor = 'var(--primary-green)';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.style.backgroundColor = '';
+                        this.disabled = false;
+                    }, 2000);
+                } else {
+                    throw new Error('Failed to add item to cart');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                this.innerHTML = '<i class="fas fa-exclamation-circle" aria-hidden="true"></i> Erro';
+                this.style.backgroundColor = '#ff4757';
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.style.backgroundColor = '';
+                    this.disabled = false;
+                }, 2000);
+            });
+        });
+    });
+</script>
+{% endblock %}

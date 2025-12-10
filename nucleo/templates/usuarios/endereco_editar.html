@@ -1,0 +1,103 @@
+{% extends 'nucleo/base.html' %}
+
+{% block title %}Editar Endereço - NerdHub{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style_perfil.css' %}">
+
+<div class="container mt-5">
+    <h2>Editar Endereço</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Editar Endereço</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="label" class="form-label">Nome do Endereço (opcional)</label>
+                            <input type="text" class="form-control" id="label" name="label" value="{{ endereco.label }}" placeholder="Ex: Casa, Trabalho">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="recipient_name" class="form-label">Nome do Destinatário</label>
+                            <input type="text" class="form-control" id="recipient_name" name="recipient_name" value="{{ endereco.recipient_name }}" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label for="street" class="form-label">Rua</label>
+                                    <input type="text" class="form-control" id="street" name="street" value="{{ endereco.street }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="number" class="form-label">Número</label>
+                                    <input type="text" class="form-control" id="number" name="number" value="{{ endereco.number }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="complement" class="form-label">Complemento (opcional)</label>
+                            <input type="text" class="form-control" id="complement" name="complement" value="{{ endereco.complement }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="neighborhood" class="form-label">Bairro</label>
+                            <input type="text" class="form-control" id="neighborhood" name="neighborhood" value="{{ endereco.neighborhood }}" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="city" class="form-label">Cidade</label>
+                                    <input type="text" class="form-control" id="city" name="city" value="{{ endereco.city }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="state" class="form-label">Estado</label>
+                                    <input type="text" class="form-control" id="state" name="state" value="{{ endereco.state }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="postal_code" class="form-label">CEP</label>
+                                    <input type="text" class="form-control" id="postal_code" name="postal_code" value="{{ endereco.postal_code }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="phone_at_address" class="form-label">Telefone (opcional)</label>
+                                    <input type="text" class="form-control" id="phone_at_address" name="phone_at_address" value="{{ endereco.phone_at_address }}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Atualizar Endereço</button>
+                        <a href="{% url 'usuario:enderecos' %}" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
