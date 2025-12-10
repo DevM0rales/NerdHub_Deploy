@@ -10,7 +10,7 @@
 
 2. **Configuration Files**
    - requirements.txt (Python dependencies)
-   - Procfile (Heroku deployment configuration)
+   - Procfile (Heroku/Railway deployment configuration)
    - runtime.txt (Python version specification)
 
 3. **Static and Media Files**
@@ -18,7 +18,7 @@
    - media/ (Uploaded files like product images and user avatars)
 
 4. **Database**
-   - db.sqlite3 (Application database with data)
+   - db.sqlite3 (Application database with data - for development only)
 
 ## Deployment Steps
 
@@ -42,9 +42,23 @@
    gunicorn Nerdhub.wsgi
    ```
 
+## Railway-Specific Configuration
+
+1. **Environment Variables**:
+   - `DJANGO_SECRET_KEY` - Generate a secure random string (required)
+   - `DEBUG` - Set to `False` (required for production)
+   - `DJANGO_ALLOWED_HOSTS` - Include your Railway domain (e.g., `your-app.up.railway.app`)
+   - `DATABASE_URL` - Provided automatically by Railway (no need to set manually)
+
+2. **Database**:
+   - Railway automatically provides a PostgreSQL database
+   - The application is configured to use PostgreSQL when `DATABASE_URL` is present
+   - For local development, SQLite is still used
+
 ## Notes
 
-- The application is configured to use SQLite database for development
-- Static files are served from nucleo/static/ during development
+- The application automatically detects Railway deployment through the `DATABASE_URL` environment variable
+- Static files are served using WhiteNoise for production
+- For local development, static files are served from nucleo/static/
 - For production, static files should be collected to staticfiles/ directory
-- The Procfile is configured for Heroku deployment using gunicorn
+- The Procfile is configured for Heroku/Railway deployment using gunicorn

@@ -25,4 +25,7 @@ urlpatterns = [
     path('gerenciar/produtos/adicionar/', views.admin_produto_adicionar, name='admin_produto_adicionar'),
     path('gerenciar/produtos/editar/<int:produto_id>/', views.admin_produto_editar, name='admin_produto_editar'),
     path('gerenciar/produtos/remover/<int:produto_id>/', views.admin_produto_remover, name='admin_produto_remover'),
+    
+    # Health check endpoint
+    path('health/', views.health_check, name='health_check'),
 ]

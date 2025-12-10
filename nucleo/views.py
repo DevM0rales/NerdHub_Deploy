@@ -5,13 +5,17 @@ Este arquivo contém todas as views (controladores) do sistema,
 responsáveis por processar requisições e retornar respostas.
 """
 
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Produto, Review, Marca, Carrinho, ItemCarrinho, Pedido, Estoque, ItemPedido, Categoria
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
+from .models import Produto, Categoria, Marca, Carrinho, ItemCarrinho, Pedido, Review
+from usuarios.models import Endereco
+import json
+from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q, Avg
+from django.core.paginator import Paginator
+from django.http import HttpResponse
 
 
 # ============================================
@@ -749,3 +753,14 @@ def admin_produto_remover(request, produto_id):
     
     messages.success(request, f"Produto '{nome_produto}' removido com sucesso!")
     return redirect('nucleo:admin_produtos')
+
+
+def health_check(request):
+    """
+    Simple health check endpoint for deployment verification
+    """
+    return JsonResponse({
+        'status': 'healthy',
+        'message': 'NerdHub is running successfully!',
+        'deployment': 'Railway'
+    })
