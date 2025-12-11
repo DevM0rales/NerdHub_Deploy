@@ -1,2 +1,2 @@
-release: python manage.py migrate --noinput && python manage.py loaddata seed.json || true
+release: python manage.py migrate --noinput
 web: gunicorn Nerdhub.wsgi --log-file -
