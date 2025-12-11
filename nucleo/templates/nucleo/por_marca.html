@@ -54,10 +54,13 @@
       {% for produto in produtos %}
       <div class="produto-item">
         <div class="favorite-icon"></div>
-        <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="produto-imagem">
-        <h3>{{ produto.nome }}</h3>
+        <a href="{% url 'nucleo:detalhe_produto' produto.id %}">
+          <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="produto-imagem">
+        </a>
+        <a href="{% url 'nucleo:detalhe_produto' produto.id %}">
+          <h3>{{ produto.nome }}</h3>
+        </a>
         <p class="price">R$ {{ produto.preco }}</p>
-        <a href="{% url 'nucleo:detalhe_produto' produto.id %}" class="btn">Ver mais</a>
       </div>
       {% endfor %}
     </div>
