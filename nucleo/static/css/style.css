@@ -475,6 +475,8 @@ main {
     padding: 0;
     min-height: calc(100vh - 200px);
     box-sizing: border-box;
+    padding-bottom: 20px; /* Add padding to prevent content from touching footer */
+    overflow: hidden; /* Clearfix to contain floated elements */
 }
 
 /* FOOTER */
@@ -483,6 +485,8 @@ footer {
     color: white;
     padding: 40px 20px 20px 20px;
     margin-top: 0;
+    position: relative;
+    z-index: 10;
 }
 
 .footer-top {
