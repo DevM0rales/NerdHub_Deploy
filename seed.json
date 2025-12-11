@@ -1,0 +1,1557 @@
+[
+{
+    "model": "nucleo.marca",
+    "pk": 1,
+    "fields": {
+        "nome": "Gen┌rica",
+        "logo": ""
+    }
+},
+{
+    "model": "nucleo.marca",
+    "pk": 2,
+    "fields": {
+        "nome": "Disney",
+        "logo": ""
+    }
+},
+{
+    "model": "nucleo.marca",
+    "pk": 3,
+    "fields": {
+        "nome": "Marvel",
+        "logo": ""
+    }
+},
+{
+    "model": "nucleo.marca",
+    "pk": 4,
+    "fields": {
+        "nome": "Star Wars",
+        "logo": ""
+    }
+},
+{
+    "model": "nucleo.marca",
+    "pk": 5,
+    "fields": {
+        "nome": "PlayStation",
+        "logo": ""
+    }
+},
+{
+    "model": "nucleo.marca",
+    "pk": 6,
+    "fields": {
+        "nome": "Xbox",
+        "logo": ""
+    }
+},
+{
+    "model": "nucleo.categoria",
+    "pk": 1,
+    "fields": {
+        "nome": "vestimenta"
+    }
+},
+{
+    "model": "nucleo.categoria",
+    "pk": 2,
+    "fields": {
+        "nome": "Funko"
+    }
+},
+{
+    "model": "nucleo.categoria",
+    "pk": 3,
+    "fields": {
+        "nome": "Funko Pop"
+    }
+},
+{
+    "model": "nucleo.categoria",
+    "pk": 4,
+    "fields": {
+        "nome": "Action Figure"
+    }
+},
+{
+    "model": "nucleo.categoria",
+    "pk": 5,
+    "fields": {
+        "nome": "Camisetas"
+    }
+},
+{
+    "model": "nucleo.categoria",
+    "pk": 6,
+    "fields": {
+        "nome": "Acess¥rios"
+    }
+},
+{
+    "model": "nucleo.produto",
+    "pk": 39,
+    "fields": {
+        "nome": "Mochila Mickey Classic Edition",
+        "descricao": "Mochila estilosa com o rosto do Mickey bordado e detalhes em couro sint┌tico.",
+        "preco": "179.90",
+        "imagem_principal": "produtos/funko_mickey.jpg",
+        "marca": 2,
+        "categoria": null,
+        "criado_em": "2025-11-10T17:00:46.980Z"
+    }
+},
+{
+    "model": "nucleo.produto",
+    "pk": 40,
+    "fields": {
+        "nome": "produto 2",
+        "descricao": "asd asd asd asd asd asd",
+        "preco": "12.00",
+        "imagem_principal": "produtos/Group_135.png",
+        "marca": 3,
+        "categoria": 6,
+        "criado_em": "2025-12-04T19:19:40.172Z"
+    }
+},
+{
+    "model": "nucleo.produto",
+    "pk": 41,
+    "fields": {
+        "nome": "produto 4",
+        "descricao": "awesdf vadfg sdfb sdfb",
+        "preco": "123.00",
+        "imagem_principal": "produtos/Group_135-1.png",
+        "marca": 6,
+        "categoria": 6,
+        "criado_em": "2025-12-04T19:20:16.832Z"
+    }
+},
+{
+    "model": "nucleo.produto",
+    "pk": 42,
+    "fields": {
+        "nome": "produto 1",
+        "descricao": "olikjhsd flskd flskdf sdf",
+        "preco": "15.00",
+        "imagem_principal": "produtos/Group_192-1.png",
+        "marca": 6,
+        "categoria": 6,
+        "criado_em": "2025-12-04T19:21:49.985Z"
+    }
+},
+{
+    "model": "nucleo.produto",
+    "pk": 43,
+    "fields": {
+        "nome": "produto 5",
+        "descricao": "lkjasn dlkansldfknas das",
+        "preco": "13.00",
+        "imagem_principal": "produtos/Group_196.png",
+        "marca": 6,
+        "categoria": 1,
+        "criado_em": "2025-12-04T19:39:42.424Z"
+    }
+},
+{
+    "model": "nucleo.produto",
+    "pk": 44,
+    "fields": {
+        "nome": "produto teste",
+        "descricao": "Produto criado para testar a funcionalidade de adicionar produtos pela p▀gina de perfil.",
+        "preco": "100.00",
+        "imagem_principal": "produtos/chewbacca.jpg",
+        "marca": 6,
+        "categoria": 1,
+        "criado_em": "2025-12-06T18:29:04.195Z"
+    }
+},
+{
+    "model": "nucleo.imagemproduto",
+    "pk": 36,
+    "fields": {
+        "produto": 39,
+        "imagem": "produtos/adicionais/gemini-2.5-flash-image-preview_nano-banana_b_continue_porfavor_so_1.png"
+    }
+},
+{
+    "model": "nucleo.imagemproduto",
+    "pk": 37,
+    "fields": {
+        "produto": 39,
+        "imagem": "produtos/adicionais/a431b242-eb9a-49b8-876f-8c8859a9e908.jpg"
+    }
+},
+{
+    "model": "nucleo.imagemproduto",
+    "pk": 38,
+    "fields": {
+        "produto": 42,
+        "imagem": "produtos/adicionais/Group_192-1.png"
+    }
+},
+{
+    "model": "nucleo.review",
+    "pk": 4,
+    "fields": {
+        "produto": 40,
+        "usuario": [
+            "Lucas"
+        ],
+        "comentario": "qasd as",
+        "nota": 2,
+        "criado_em": "2025-12-04T19:54:26.524Z"
+    }
+},
+{
+    "model": "nucleo.estoque",
+    "pk": 5,
+    "fields": {
+        "produto": 44,
+        "quantidade": 97
+    }
+},
+{
+    "model": "nucleo.carrinho",
+    "pk": 1,
+    "fields": {
+        "usuario": [
+            "admin"
+        ]
+    }
+},
+{
+    "model": "nucleo.carrinho",
+    "pk": 2,
+    "fields": {
+        "usuario": [
+            "DIAS"
+        ]
+    }
+},
+{
+    "model": "nucleo.carrinho",
+    "pk": 3,
+    "fields": {
+        "usuario": [
+            "Danilo"
+        ]
+    }
+},
+{
+    "model": "nucleo.carrinho",
+    "pk": 4,
+    "fields": {
+        "usuario": [
+            "Danxz"
+        ]
+    }
+},
+{
+    "model": "nucleo.carrinho",
+    "pk": 5,
+    "fields": {
+        "usuario": [
+            "niko"
+        ]
+    }
+},
+{
+    "model": "nucleo.carrinho",
+    "pk": 6,
+    "fields": {
+        "usuario": [
+            "Lucas"
+        ]
+    }
+},
+{
+    "model": "nucleo.carrinho",
+    "pk": 7,
+    "fields": {
+        "usuario": [
+            "lucas"
+        ]
+    }
+},
+{
+    "model": "nucleo.carrinho",
+    "pk": 8,
+    "fields": {
+        "usuario": [
+            "Lucas_cliente"
+        ]
+    }
+},
+{
+    "model": "nucleo.itemcarrinho",
+    "pk": 20,
+    "fields": {
+        "carrinho": 6,
+        "produto": 40,
+        "quantidade": 1
+    }
+},
+{
+    "model": "nucleo.itemcarrinho",
+    "pk": 40,
+    "fields": {
+        "carrinho": 7,
+        "produto": 42,
+        "quantidade": 2
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 1,
+    "fields": {
+        "usuario": [
+            "Danilo"
+        ],
+        "criado_em": "2025-09-26T17:07:31.663Z",
+        "finalizado": false,
+        "endereco_destinatario": "",
+        "endereco_rua": "",
+        "endereco_numero": "",
+        "endereco_complemento": "",
+        "endereco_bairro": "",
+        "endereco_cidade": "",
+        "endereco_estado": "",
+        "endereco_cep": "",
+        "endereco_telefone": "",
+        "forma_pagamento": "",
+        "total": "0.00"
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 2,
+    "fields": {
+        "usuario": [
+            "Danilo"
+        ],
+        "criado_em": "2025-09-29T18:21:09.835Z",
+        "finalizado": false,
+        "endereco_destinatario": "",
+        "endereco_rua": "",
+        "endereco_numero": "",
+        "endereco_complemento": "",
+        "endereco_bairro": "",
+        "endereco_cidade": "",
+        "endereco_estado": "",
+        "endereco_cep": "",
+        "endereco_telefone": "",
+        "forma_pagamento": "",
+        "total": "0.00"
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 3,
+    "fields": {
+        "usuario": [
+            "Danilo"
+        ],
+        "criado_em": "2025-09-29T20:23:15.160Z",
+        "finalizado": false,
+        "endereco_destinatario": "",
+        "endereco_rua": "",
+        "endereco_numero": "",
+        "endereco_complemento": "",
+        "endereco_bairro": "",
+        "endereco_cidade": "",
+        "endereco_estado": "",
+        "endereco_cep": "",
+        "endereco_telefone": "",
+        "forma_pagamento": "",
+        "total": "0.00"
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 4,
+    "fields": {
+        "usuario": [
+            "Danilo"
+        ],
+        "criado_em": "2025-09-29T20:40:36.785Z",
+        "finalizado": false,
+        "endereco_destinatario": "",
+        "endereco_rua": "",
+        "endereco_numero": "",
+        "endereco_complemento": "",
+        "endereco_bairro": "",
+        "endereco_cidade": "",
+        "endereco_estado": "",
+        "endereco_cep": "",
+        "endereco_telefone": "",
+        "forma_pagamento": "",
+        "total": "0.00"
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 5,
+    "fields": {
+        "usuario": [
+            "Danilo"
+        ],
+        "criado_em": "2025-10-06T19:31:39.334Z",
+        "finalizado": false,
+        "endereco_destinatario": "",
+        "endereco_rua": "",
+        "endereco_numero": "",
+        "endereco_complemento": "",
+        "endereco_bairro": "",
+        "endereco_cidade": "",
+        "endereco_estado": "",
+        "endereco_cep": "",
+        "endereco_telefone": "",
+        "forma_pagamento": "",
+        "total": "0.00"
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 6,
+    "fields": {
+        "usuario": [
+            "Lucas"
+        ],
+        "criado_em": "2025-12-04T17:47:45.227Z",
+        "finalizado": false,
+        "endereco_destinatario": "",
+        "endereco_rua": "",
+        "endereco_numero": "",
+        "endereco_complemento": "",
+        "endereco_bairro": "",
+        "endereco_cidade": "",
+        "endereco_estado": "",
+        "endereco_cep": "",
+        "endereco_telefone": "",
+        "forma_pagamento": "",
+        "total": "0.00"
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 7,
+    "fields": {
+        "usuario": [
+            "lucas"
+        ],
+        "criado_em": "2025-12-04T19:53:40.852Z",
+        "finalizado": false,
+        "endereco_destinatario": "",
+        "endereco_rua": "",
+        "endereco_numero": "",
+        "endereco_complemento": "",
+        "endereco_bairro": "",
+        "endereco_cidade": "",
+        "endereco_estado": "",
+        "endereco_cep": "",
+        "endereco_telefone": "",
+        "forma_pagamento": "",
+        "total": "0.00"
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 8,
+    "fields": {
+        "usuario": [
+            "lucas"
+        ],
+        "criado_em": "2025-12-06T19:08:43.804Z",
+        "finalizado": false,
+        "endereco_destinatario": "",
+        "endereco_rua": "",
+        "endereco_numero": "",
+        "endereco_complemento": "",
+        "endereco_bairro": "",
+        "endereco_cidade": "",
+        "endereco_estado": "",
+        "endereco_cep": "",
+        "endereco_telefone": "",
+        "forma_pagamento": "",
+        "total": "0.00"
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 9,
+    "fields": {
+        "usuario": [
+            "lucas"
+        ],
+        "criado_em": "2025-12-06T19:15:17.288Z",
+        "finalizado": true,
+        "endereco_destinatario": "Lucas",
+        "endereco_rua": "Quadra",
+        "endereco_numero": "803",
+        "endereco_complemento": "Conjunto 22",
+        "endereco_bairro": "Recanto Das Emas",
+        "endereco_cidade": "Bras¦lia",
+        "endereco_estado": "DF",
+        "endereco_cep": "72650515",
+        "endereco_telefone": "61998508516",
+        "forma_pagamento": "pix",
+        "total": "100.00"
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 10,
+    "fields": {
+        "usuario": [
+            "lucas"
+        ],
+        "criado_em": "2025-12-09T20:27:35.613Z",
+        "finalizado": true,
+        "endereco_destinatario": "Lucas",
+        "endereco_rua": "Quadra",
+        "endereco_numero": "803",
+        "endereco_complemento": "Conjunto 22",
+        "endereco_bairro": "Recanto Das Emas",
+        "endereco_cidade": "Bras¦lia",
+        "endereco_estado": "DF",
+        "endereco_cep": "72650515",
+        "endereco_telefone": "61998508516",
+        "forma_pagamento": "debito",
+        "total": "279.00"
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 11,
+    "fields": {
+        "usuario": [
+            "lucas"
+        ],
+        "criado_em": "2025-12-10T02:11:32.831Z",
+        "finalizado": true,
+        "endereco_destinatario": "Lucas",
+        "endereco_rua": "Quadra",
+        "endereco_numero": "803",
+        "endereco_complemento": "Conjunto 22",
+        "endereco_bairro": "Recanto Das Emas",
+        "endereco_cidade": "Bras¦lia",
+        "endereco_estado": "DF",
+        "endereco_cep": "72650515",
+        "endereco_telefone": "61998508516",
+        "forma_pagamento": "credito",
+        "total": "13.00"
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 12,
+    "fields": {
+        "usuario": [
+            "lucas"
+        ],
+        "criado_em": "2025-12-10T04:27:43.247Z",
+        "finalizado": true,
+        "endereco_destinatario": "Lucas",
+        "endereco_rua": "Quadra",
+        "endereco_numero": "803",
+        "endereco_complemento": "Conjunto 22",
+        "endereco_bairro": "Recanto Das Emas",
+        "endereco_cidade": "Bras¦lia",
+        "endereco_estado": "DF",
+        "endereco_cep": "72650515",
+        "endereco_telefone": "61998508516",
+        "forma_pagamento": "pix",
+        "total": "15.00"
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 13,
+    "fields": {
+        "usuario": [
+            "lucas"
+        ],
+        "criado_em": "2025-12-10T16:38:48.330Z",
+        "finalizado": true,
+        "endereco_destinatario": "Lucas",
+        "endereco_rua": "Quadra",
+        "endereco_numero": "803",
+        "endereco_complemento": "Conjunto 22",
+        "endereco_bairro": "Recanto Das Emas",
+        "endereco_cidade": "Bras¦lia",
+        "endereco_estado": "DF",
+        "endereco_cep": "72650515",
+        "endereco_telefone": "61998508516",
+        "forma_pagamento": "pix",
+        "total": "151.00"
+    }
+},
+{
+    "model": "nucleo.pedido",
+    "pk": 14,
+    "fields": {
+        "usuario": [
+            "lucas"
+        ],
+        "criado_em": "2025-12-11T14:20:42.918Z",
+        "finalizado": true,
+        "endereco_destinatario": "Lucas",
+        "endereco_rua": "Quadra",
+        "endereco_numero": "803",
+        "endereco_complemento": "Conjunto 22",
+        "endereco_bairro": "Recanto Das Emas",
+        "endereco_cidade": "Bras¦lia",
+        "endereco_estado": "DF",
+        "endereco_cep": "72650515",
+        "endereco_telefone": "61999999999",
+        "forma_pagamento": "pix",
+        "total": "30.00"
+    }
+},
+{
+    "model": "nucleo.itempedido",
+    "pk": 9,
+    "fields": {
+        "pedido": 7,
+        "produto": 41,
+        "quantidade": 1,
+        "preco_unitario": "123.00"
+    }
+},
+{
+    "model": "nucleo.itempedido",
+    "pk": 10,
+    "fields": {
+        "pedido": 8,
+        "produto": 44,
+        "quantidade": 1,
+        "preco_unitario": "100.00"
+    }
+},
+{
+    "model": "nucleo.itempedido",
+    "pk": 11,
+    "fields": {
+        "pedido": 9,
+        "produto": 44,
+        "quantidade": 1,
+        "preco_unitario": "100.00"
+    }
+},
+{
+    "model": "nucleo.itempedido",
+    "pk": 12,
+    "fields": {
+        "pedido": 10,
+        "produto": 42,
+        "quantidade": 2,
+        "preco_unitario": "15.00"
+    }
+},
+{
+    "model": "nucleo.itempedido",
+    "pk": 13,
+    "fields": {
+        "pedido": 10,
+        "produto": 41,
+        "quantidade": 1,
+        "preco_unitario": "123.00"
+    }
+},
+{
+    "model": "nucleo.itempedido",
+    "pk": 14,
+    "fields": {
+        "pedido": 10,
+        "produto": 43,
+        "quantidade": 2,
+        "preco_unitario": "13.00"
+    }
+},
+{
+    "model": "nucleo.itempedido",
+    "pk": 15,
+    "fields": {
+        "pedido": 10,
+        "produto": 44,
+        "quantidade": 1,
+        "preco_unitario": "100.00"
+    }
+},
+{
+    "model": "nucleo.itempedido",
+    "pk": 16,
+    "fields": {
+        "pedido": 11,
+        "produto": 43,
+        "quantidade": 1,
+        "preco_unitario": "13.00"
+    }
+},
+{
+    "model": "nucleo.itempedido",
+    "pk": 17,
+    "fields": {
+        "pedido": 12,
+        "produto": 42,
+        "quantidade": 1,
+        "preco_unitario": "15.00"
+    }
+},
+{
+    "model": "nucleo.itempedido",
+    "pk": 18,
+    "fields": {
+        "pedido": 13,
+        "produto": 42,
+        "quantidade": 1,
+        "preco_unitario": "15.00"
+    }
+},
+{
+    "model": "nucleo.itempedido",
+    "pk": 19,
+    "fields": {
+        "pedido": 13,
+        "produto": 43,
+        "quantidade": 1,
+        "preco_unitario": "13.00"
+    }
+},
+{
+    "model": "nucleo.itempedido",
+    "pk": 20,
+    "fields": {
+        "pedido": 13,
+        "produto": 41,
+        "quantidade": 1,
+        "preco_unitario": "123.00"
+    }
+},
+{
+    "model": "usuarios.perfil",
+    "pk": 1,
+    "fields": {
+        "user": [
+            "testuser"
+        ],
+        "display_name": "",
+        "first_name": "",
+        "last_name": "",
+        "birth_date": null,
+        "gender": "",
+        "cpf": "",
+        "rg": "",
+        "document_type": "",
+        "tax_id": "",
+        "phone": "",
+        "phone_verified": false,
+        "secondary_email": "",
+        "preferred_contact_method": "",
+        "language": "pt-BR",
+        "currency": "BRL",
+        "newsletter_subscribed": false,
+        "marketing_opt_in": false,
+        "favorite_categories": "",
+        "favorite_brands": "",
+        "display_prices_with_tax": false,
+        "receive_back_in_stock_alerts": true,
+        "share_profile_with_community": false,
+        "avatar_url": "",
+        "bio": "",
+        "social_links": "",
+        "preferred_display_style": "username",
+        "profile_visibility": "public",
+        "show_order_history_public": false,
+        "wishlist": "",
+        "favorites": "",
+        "followers_count": 0,
+        "following_count": 0,
+        "achievement_points": 0,
+        "badges": "",
+        "terms_accepted": false,
+        "terms_accepted_at": null,
+        "privacy_policy_accepted": false,
+        "privacy_policy_accepted_at": null,
+        "marketing_consent": null,
+        "cookie_preferences": "",
+        "data_deletion_request": false,
+        "data_deletion_request_at": null,
+        "data_export_request": false,
+        "data_export_request_at": null,
+        "is_admin": false,
+        "is_staff": false,
+        "account_status": "active",
+        "moderation_notes": "",
+        "created_at": "2025-09-26T17:30:52.260Z",
+        "updated_at": "2025-09-26T17:30:52.284Z",
+        "last_login_at": null,
+        "last_order_at": null,
+        "preferred_device": "",
+        "signup_source": "",
+        "oauth_provider": "",
+        "oauth_provider_id": "",
+        "payment_gateway_customer_id": "",
+        "shipping_provider_customer_ref": "",
+        "favorite_franchises": "",
+        "shirt_size": "",
+        "shoe_size": "",
+        "collector_preferences": "",
+        "age_for_collectibles": null,
+        "want_notifications_for_new_releases": true,
+        "preorder_opt_in": false
+    }
+},
+{
+    "model": "usuarios.perfil",
+    "pk": 2,
+    "fields": {
+        "user": [
+            "Danilo"
+        ],
+        "display_name": "Sla",
+        "first_name": "dsadsa",
+        "last_name": "dsw3r",
+        "birth_date": null,
+        "gender": "",
+        "cpf": "",
+        "rg": "",
+        "document_type": "",
+        "tax_id": "",
+        "phone": "61993968979",
+        "phone_verified": false,
+        "secondary_email": "",
+        "preferred_contact_method": "",
+        "language": "pt-BR",
+        "currency": "BRL",
+        "newsletter_subscribed": false,
+        "marketing_opt_in": false,
+        "favorite_categories": "",
+        "favorite_brands": "",
+        "display_prices_with_tax": false,
+        "receive_back_in_stock_alerts": true,
+        "share_profile_with_community": false,
+        "avatar_url": "",
+        "bio": "dsafasd",
+        "social_links": "",
+        "preferred_display_style": "username",
+        "profile_visibility": "public",
+        "show_order_history_public": false,
+        "wishlist": "",
+        "favorites": "",
+        "followers_count": 0,
+        "following_count": 0,
+        "achievement_points": 0,
+        "badges": "",
+        "terms_accepted": false,
+        "terms_accepted_at": null,
+        "privacy_policy_accepted": false,
+        "privacy_policy_accepted_at": null,
+        "marketing_consent": null,
+        "cookie_preferences": "",
+        "data_deletion_request": false,
+        "data_deletion_request_at": null,
+        "data_export_request": false,
+        "data_export_request_at": null,
+        "is_admin": false,
+        "is_staff": false,
+        "account_status": "active",
+        "moderation_notes": "",
+        "created_at": "2025-09-26T17:33:29.068Z",
+        "updated_at": "2025-11-18T18:20:46.510Z",
+        "last_login_at": "2025-11-18T18:20:46.510Z",
+        "last_order_at": null,
+        "preferred_device": "",
+        "signup_source": "",
+        "oauth_provider": "",
+        "oauth_provider_id": "",
+        "payment_gateway_customer_id": "",
+        "shipping_provider_customer_ref": "",
+        "favorite_franchises": "",
+        "shirt_size": "",
+        "shoe_size": "",
+        "collector_preferences": "",
+        "age_for_collectibles": null,
+        "want_notifications_for_new_releases": true,
+        "preorder_opt_in": false
+    }
+},
+{
+    "model": "usuarios.perfil",
+    "pk": 3,
+    "fields": {
+        "user": [
+            "morales"
+        ],
+        "display_name": "",
+        "first_name": "",
+        "last_name": "",
+        "birth_date": null,
+        "gender": "",
+        "cpf": "",
+        "rg": "",
+        "document_type": "",
+        "tax_id": "",
+        "phone": "",
+        "phone_verified": false,
+        "secondary_email": "",
+        "preferred_contact_method": "",
+        "language": "pt-BR",
+        "currency": "BRL",
+        "newsletter_subscribed": false,
+        "marketing_opt_in": false,
+        "favorite_categories": "",
+        "favorite_brands": "",
+        "display_prices_with_tax": false,
+        "receive_back_in_stock_alerts": true,
+        "share_profile_with_community": false,
+        "avatar_url": "",
+        "bio": "",
+        "social_links": "",
+        "preferred_display_style": "username",
+        "profile_visibility": "public",
+        "show_order_history_public": false,
+        "wishlist": "",
+        "favorites": "",
+        "followers_count": 0,
+        "following_count": 0,
+        "achievement_points": 0,
+        "badges": "",
+        "terms_accepted": false,
+        "terms_accepted_at": null,
+        "privacy_policy_accepted": false,
+        "privacy_policy_accepted_at": null,
+        "marketing_consent": null,
+        "cookie_preferences": "",
+        "data_deletion_request": false,
+        "data_deletion_request_at": null,
+        "data_export_request": false,
+        "data_export_request_at": null,
+        "is_admin": false,
+        "is_staff": false,
+        "account_status": "active",
+        "moderation_notes": "",
+        "created_at": "2025-09-29T18:20:16.880Z",
+        "updated_at": "2025-09-29T18:20:16.917Z",
+        "last_login_at": null,
+        "last_order_at": null,
+        "preferred_device": "",
+        "signup_source": "",
+        "oauth_provider": "",
+        "oauth_provider_id": "",
+        "payment_gateway_customer_id": "",
+        "shipping_provider_customer_ref": "",
+        "favorite_franchises": "",
+        "shirt_size": "",
+        "shoe_size": "",
+        "collector_preferences": "",
+        "age_for_collectibles": null,
+        "want_notifications_for_new_releases": true,
+        "preorder_opt_in": false
+    }
+},
+{
+    "model": "usuarios.perfil",
+    "pk": 4,
+    "fields": {
+        "user": [
+            "Danxz"
+        ],
+        "display_name": "",
+        "first_name": "",
+        "last_name": "",
+        "birth_date": null,
+        "gender": "",
+        "cpf": "",
+        "rg": "",
+        "document_type": "",
+        "tax_id": "",
+        "phone": "",
+        "phone_verified": false,
+        "secondary_email": "",
+        "preferred_contact_method": "",
+        "language": "pt-BR",
+        "currency": "BRL",
+        "newsletter_subscribed": false,
+        "marketing_opt_in": false,
+        "favorite_categories": "",
+        "favorite_brands": "",
+        "display_prices_with_tax": false,
+        "receive_back_in_stock_alerts": true,
+        "share_profile_with_community": false,
+        "avatar_url": "",
+        "bio": "",
+        "social_links": "",
+        "preferred_display_style": "username",
+        "profile_visibility": "public",
+        "show_order_history_public": false,
+        "wishlist": "",
+        "favorites": "",
+        "followers_count": 0,
+        "following_count": 0,
+        "achievement_points": 0,
+        "badges": "",
+        "terms_accepted": false,
+        "terms_accepted_at": null,
+        "privacy_policy_accepted": false,
+        "privacy_policy_accepted_at": null,
+        "marketing_consent": null,
+        "cookie_preferences": "",
+        "data_deletion_request": false,
+        "data_deletion_request_at": null,
+        "data_export_request": false,
+        "data_export_request_at": null,
+        "is_admin": false,
+        "is_staff": false,
+        "account_status": "active",
+        "moderation_notes": "",
+        "created_at": "2025-10-21T17:54:35.730Z",
+        "updated_at": "2025-10-31T19:19:37.888Z",
+        "last_login_at": "2025-10-31T19:19:37.888Z",
+        "last_order_at": null,
+        "preferred_device": "",
+        "signup_source": "",
+        "oauth_provider": "",
+        "oauth_provider_id": "",
+        "payment_gateway_customer_id": "",
+        "shipping_provider_customer_ref": "",
+        "favorite_franchises": "",
+        "shirt_size": "",
+        "shoe_size": "",
+        "collector_preferences": "",
+        "age_for_collectibles": null,
+        "want_notifications_for_new_releases": true,
+        "preorder_opt_in": false
+    }
+},
+{
+    "model": "usuarios.perfil",
+    "pk": 5,
+    "fields": {
+        "user": [
+            "niko"
+        ],
+        "display_name": "",
+        "first_name": "",
+        "last_name": "",
+        "birth_date": null,
+        "gender": "",
+        "cpf": "",
+        "rg": "",
+        "document_type": "",
+        "tax_id": "",
+        "phone": "",
+        "phone_verified": false,
+        "secondary_email": "",
+        "preferred_contact_method": "",
+        "language": "pt-BR",
+        "currency": "BRL",
+        "newsletter_subscribed": false,
+        "marketing_opt_in": false,
+        "favorite_categories": "",
+        "favorite_brands": "",
+        "display_prices_with_tax": false,
+        "receive_back_in_stock_alerts": true,
+        "share_profile_with_community": false,
+        "avatar_url": "",
+        "bio": "",
+        "social_links": "",
+        "preferred_display_style": "username",
+        "profile_visibility": "public",
+        "show_order_history_public": false,
+        "wishlist": "",
+        "favorites": "",
+        "followers_count": 0,
+        "following_count": 0,
+        "achievement_points": 0,
+        "badges": "",
+        "terms_accepted": false,
+        "terms_accepted_at": null,
+        "privacy_policy_accepted": false,
+        "privacy_policy_accepted_at": null,
+        "marketing_consent": null,
+        "cookie_preferences": "",
+        "data_deletion_request": false,
+        "data_deletion_request_at": null,
+        "data_export_request": false,
+        "data_export_request_at": null,
+        "is_admin": false,
+        "is_staff": false,
+        "account_status": "active",
+        "moderation_notes": "",
+        "created_at": "2025-11-11T19:59:06.702Z",
+        "updated_at": "2025-11-11T20:03:49.081Z",
+        "last_login_at": null,
+        "last_order_at": null,
+        "preferred_device": "",
+        "signup_source": "",
+        "oauth_provider": "",
+        "oauth_provider_id": "",
+        "payment_gateway_customer_id": "",
+        "shipping_provider_customer_ref": "",
+        "favorite_franchises": "",
+        "shirt_size": "",
+        "shoe_size": "",
+        "collector_preferences": "",
+        "age_for_collectibles": null,
+        "want_notifications_for_new_releases": true,
+        "preorder_opt_in": false
+    }
+},
+{
+    "model": "usuarios.perfil",
+    "pk": 6,
+    "fields": {
+        "user": [
+            "Lucas"
+        ],
+        "display_name": "",
+        "first_name": "",
+        "last_name": "",
+        "birth_date": null,
+        "gender": "",
+        "cpf": "",
+        "rg": "",
+        "document_type": "",
+        "tax_id": "",
+        "phone": "",
+        "phone_verified": false,
+        "secondary_email": "",
+        "preferred_contact_method": "",
+        "language": "pt-BR",
+        "currency": "BRL",
+        "newsletter_subscribed": false,
+        "marketing_opt_in": false,
+        "favorite_categories": "",
+        "favorite_brands": "",
+        "display_prices_with_tax": false,
+        "receive_back_in_stock_alerts": true,
+        "share_profile_with_community": false,
+        "avatar_url": "",
+        "bio": "",
+        "social_links": "",
+        "preferred_display_style": "username",
+        "profile_visibility": "public",
+        "show_order_history_public": false,
+        "wishlist": "",
+        "favorites": "",
+        "followers_count": 0,
+        "following_count": 0,
+        "achievement_points": 0,
+        "badges": "",
+        "terms_accepted": false,
+        "terms_accepted_at": null,
+        "privacy_policy_accepted": false,
+        "privacy_policy_accepted_at": null,
+        "marketing_consent": null,
+        "cookie_preferences": "",
+        "data_deletion_request": false,
+        "data_deletion_request_at": null,
+        "data_export_request": false,
+        "data_export_request_at": null,
+        "is_admin": false,
+        "is_staff": false,
+        "account_status": "active",
+        "moderation_notes": "",
+        "created_at": "2025-12-04T17:47:35.529Z",
+        "updated_at": "2025-12-06T17:45:01.720Z",
+        "last_login_at": "2025-12-06T17:45:01.720Z",
+        "last_order_at": null,
+        "preferred_device": "",
+        "signup_source": "",
+        "oauth_provider": "",
+        "oauth_provider_id": "",
+        "payment_gateway_customer_id": "",
+        "shipping_provider_customer_ref": "",
+        "favorite_franchises": "",
+        "shirt_size": "",
+        "shoe_size": "",
+        "collector_preferences": "",
+        "age_for_collectibles": null,
+        "want_notifications_for_new_releases": true,
+        "preorder_opt_in": false
+    }
+},
+{
+    "model": "usuarios.perfil",
+    "pk": 7,
+    "fields": {
+        "user": [
+            "lucas"
+        ],
+        "display_name": "Morales admin",
+        "first_name": "Lucas",
+        "last_name": "",
+        "birth_date": null,
+        "gender": "",
+        "cpf": "",
+        "rg": "",
+        "document_type": "",
+        "tax_id": "",
+        "phone": "",
+        "phone_verified": false,
+        "secondary_email": "",
+        "preferred_contact_method": "",
+        "language": "pt-BR",
+        "currency": "BRL",
+        "newsletter_subscribed": false,
+        "marketing_opt_in": false,
+        "favorite_categories": "",
+        "favorite_brands": "",
+        "display_prices_with_tax": false,
+        "receive_back_in_stock_alerts": true,
+        "share_profile_with_community": false,
+        "avatar_url": "/media/avatars/2c7bc3d2-417e-46bb-980e-68b1644c931d.jpeg",
+        "bio": "",
+        "social_links": "",
+        "preferred_display_style": "username",
+        "profile_visibility": "public",
+        "show_order_history_public": false,
+        "wishlist": "",
+        "favorites": "",
+        "followers_count": 0,
+        "following_count": 0,
+        "achievement_points": 0,
+        "badges": "",
+        "terms_accepted": false,
+        "terms_accepted_at": null,
+        "privacy_policy_accepted": false,
+        "privacy_policy_accepted_at": null,
+        "marketing_consent": null,
+        "cookie_preferences": "",
+        "data_deletion_request": false,
+        "data_deletion_request_at": null,
+        "data_export_request": false,
+        "data_export_request_at": null,
+        "is_admin": false,
+        "is_staff": false,
+        "account_status": "active",
+        "moderation_notes": "",
+        "created_at": "2025-12-04T18:22:55.805Z",
+        "updated_at": "2025-12-11T14:21:51.641Z",
+        "last_login_at": "2025-12-11T14:19:15.917Z",
+        "last_order_at": null,
+        "preferred_device": "",
+        "signup_source": "",
+        "oauth_provider": "",
+        "oauth_provider_id": "",
+        "payment_gateway_customer_id": "",
+        "shipping_provider_customer_ref": "",
+        "favorite_franchises": "",
+        "shirt_size": "",
+        "shoe_size": "",
+        "collector_preferences": "",
+        "age_for_collectibles": null,
+        "want_notifications_for_new_releases": true,
+        "preorder_opt_in": false
+    }
+},
+{
+    "model": "usuarios.perfil",
+    "pk": 8,
+    "fields": {
+        "user": [
+            "nikolas"
+        ],
+        "display_name": "",
+        "first_name": "",
+        "last_name": "",
+        "birth_date": null,
+        "gender": "",
+        "cpf": "",
+        "rg": "",
+        "document_type": "",
+        "tax_id": "",
+        "phone": "",
+        "phone_verified": false,
+        "secondary_email": "",
+        "preferred_contact_method": "",
+        "language": "pt-BR",
+        "currency": "BRL",
+        "newsletter_subscribed": false,
+        "marketing_opt_in": false,
+        "favorite_categories": "",
+        "favorite_brands": "",
+        "display_prices_with_tax": false,
+        "receive_back_in_stock_alerts": true,
+        "share_profile_with_community": false,
+        "avatar_url": "",
+        "bio": "",
+        "social_links": "",
+        "preferred_display_style": "username",
+        "profile_visibility": "public",
+        "show_order_history_public": false,
+        "wishlist": "",
+        "favorites": "",
+        "followers_count": 0,
+        "following_count": 0,
+        "achievement_points": 0,
+        "badges": "",
+        "terms_accepted": false,
+        "terms_accepted_at": null,
+        "privacy_policy_accepted": false,
+        "privacy_policy_accepted_at": null,
+        "marketing_consent": null,
+        "cookie_preferences": "",
+        "data_deletion_request": false,
+        "data_deletion_request_at": null,
+        "data_export_request": false,
+        "data_export_request_at": null,
+        "is_admin": false,
+        "is_staff": false,
+        "account_status": "active",
+        "moderation_notes": "",
+        "created_at": "2025-12-09T20:28:17.361Z",
+        "updated_at": "2025-12-10T01:12:21.282Z",
+        "last_login_at": "2025-12-10T01:12:21.282Z",
+        "last_order_at": null,
+        "preferred_device": "",
+        "signup_source": "",
+        "oauth_provider": "",
+        "oauth_provider_id": "",
+        "payment_gateway_customer_id": "",
+        "shipping_provider_customer_ref": "",
+        "favorite_franchises": "",
+        "shirt_size": "",
+        "shoe_size": "",
+        "collector_preferences": "",
+        "age_for_collectibles": null,
+        "want_notifications_for_new_releases": true,
+        "preorder_opt_in": false
+    }
+},
+{
+    "model": "usuarios.perfil",
+    "pk": 9,
+    "fields": {
+        "user": [
+            "Lucas_cliente"
+        ],
+        "display_name": "",
+        "first_name": "",
+        "last_name": "",
+        "birth_date": null,
+        "gender": "",
+        "cpf": "",
+        "rg": "",
+        "document_type": "",
+        "tax_id": "",
+        "phone": "",
+        "phone_verified": false,
+        "secondary_email": "",
+        "preferred_contact_method": "",
+        "language": "pt-BR",
+        "currency": "BRL",
+        "newsletter_subscribed": false,
+        "marketing_opt_in": false,
+        "favorite_categories": "",
+        "favorite_brands": "",
+        "display_prices_with_tax": false,
+        "receive_back_in_stock_alerts": true,
+        "share_profile_with_community": false,
+        "avatar_url": "",
+        "bio": "",
+        "social_links": "",
+        "preferred_display_style": "username",
+        "profile_visibility": "public",
+        "show_order_history_public": false,
+        "wishlist": "",
+        "favorites": "",
+        "followers_count": 0,
+        "following_count": 0,
+        "achievement_points": 0,
+        "badges": "",
+        "terms_accepted": false,
+        "terms_accepted_at": null,
+        "privacy_policy_accepted": false,
+        "privacy_policy_accepted_at": null,
+        "marketing_consent": null,
+        "cookie_preferences": "",
+        "data_deletion_request": false,
+        "data_deletion_request_at": null,
+        "data_export_request": false,
+        "data_export_request_at": null,
+        "is_admin": false,
+        "is_staff": false,
+        "account_status": "active",
+        "moderation_notes": "",
+        "created_at": "2025-12-10T01:22:26.473Z",
+        "updated_at": "2025-12-10T01:22:43.330Z",
+        "last_login_at": null,
+        "last_order_at": null,
+        "preferred_device": "",
+        "signup_source": "",
+        "oauth_provider": "",
+        "oauth_provider_id": "",
+        "payment_gateway_customer_id": "",
+        "shipping_provider_customer_ref": "",
+        "favorite_franchises": "",
+        "shirt_size": "",
+        "shoe_size": "",
+        "collector_preferences": "",
+        "age_for_collectibles": null,
+        "want_notifications_for_new_releases": true,
+        "preorder_opt_in": false
+    }
+},
+{
+    "model": "usuarios.endereco",
+    "pk": 1,
+    "fields": {
+        "perfil": 9,
+        "label": "casa",
+        "recipient_name": "Lucas",
+        "street": "Quadra",
+        "number": "803",
+        "complement": "Conjunto 22",
+        "neighborhood": "Recanto Das Emas",
+        "city": "Bras¦lia",
+        "state": "DF",
+        "country": "Brasil",
+        "postal_code": "72650515",
+        "phone_at_address": "61999999999",
+        "is_default_shipping": true,
+        "is_default_billing": false,
+        "address_geolocation": "",
+        "created_at": "2025-12-10T01:47:34.174Z",
+        "updated_at": "2025-12-10T01:47:41.336Z"
+    }
+},
+{
+    "model": "usuarios.endereco",
+    "pk": 2,
+    "fields": {
+        "perfil": 7,
+        "label": "casa",
+        "recipient_name": "Lucas",
+        "street": "Quadra",
+        "number": "803",
+        "complement": "Conjunto 22",
+        "neighborhood": "Recanto Das Emas",
+        "city": "Bras¦lia",
+        "state": "DF",
+        "country": "Brasil",
+        "postal_code": "72650515",
+        "phone_at_address": "61999999999",
+        "is_default_shipping": false,
+        "is_default_billing": false,
+        "address_geolocation": "",
+        "created_at": "2025-12-10T02:21:37.758Z",
+        "updated_at": "2025-12-10T02:21:37.758Z"
+    }
+},
+{
+    "model": "usuarios.notificacao",
+    "pk": 1,
+    "fields": {
+        "perfil": 1,
+        "order_updates": true,
+        "promos": true,
+        "back_in_stock": true,
+        "reviews": true,
+        "system": true,
+        "sms_opt_in": false,
+        "push_notifications_enabled": true
+    }
+},
+{
+    "model": "usuarios.notificacao",
+    "pk": 2,
+    "fields": {
+        "perfil": 3,
+        "order_updates": true,
+        "promos": true,
+        "back_in_stock": true,
+        "reviews": true,
+        "system": true,
+        "sms_opt_in": false,
+        "push_notifications_enabled": true
+    }
+},
+{
+    "model": "usuarios.notificacao",
+    "pk": 3,
+    "fields": {
+        "perfil": 4,
+        "order_updates": true,
+        "promos": true,
+        "back_in_stock": true,
+        "reviews": true,
+        "system": true,
+        "sms_opt_in": false,
+        "push_notifications_enabled": true
+    }
+},
+{
+    "model": "usuarios.notificacao",
+    "pk": 4,
+    "fields": {
+        "perfil": 5,
+        "order_updates": true,
+        "promos": true,
+        "back_in_stock": true,
+        "reviews": true,
+        "system": true,
+        "sms_opt_in": false,
+        "push_notifications_enabled": true
+    }
+},
+{
+    "model": "usuarios.notificacao",
+    "pk": 5,
+    "fields": {
+        "perfil": 6,
+        "order_updates": true,
+        "promos": true,
+        "back_in_stock": true,
+        "reviews": true,
+        "system": true,
+        "sms_opt_in": false,
+        "push_notifications_enabled": true
+    }
+},
+{
+    "model": "usuarios.notificacao",
+    "pk": 6,
+    "fields": {
+        "perfil": 7,
+        "order_updates": true,
+        "promos": true,
+        "back_in_stock": true,
+        "reviews": true,
+        "system": true,
+        "sms_opt_in": false,
+        "push_notifications_enabled": true
+    }
+},
+{
+    "model": "usuarios.notificacao",
+    "pk": 7,
+    "fields": {
+        "perfil": 8,
+        "order_updates": true,
+        "promos": true,
+        "back_in_stock": true,
+        "reviews": true,
+        "system": true,
+        "sms_opt_in": false,
+        "push_notifications_enabled": true
+    }
+},
+{
+    "model": "usuarios.notificacao",
+    "pk": 8,
+    "fields": {
+        "perfil": 9,
+        "order_updates": true,
+        "promos": true,
+        "back_in_stock": true,
+        "reviews": true,
+        "system": true,
+        "sms_opt_in": false,
+        "push_notifications_enabled": true
+    }
+}
+]
