@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footer Nerd Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3 class="footer-title">
+                        <i class="fas fa-gamepad"></i> NerdHub
+                    </h3>
+                    <p class="footer-description">
+                        Sua loja de confiança para produtos de alta qualidade e atendimento excepcional.
+                    </p>
+                </div>
+
+                <div class="footer-column">
+                    <h3 class="footer-title">Links Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="/" class="footer-link">Principal</a></li>
+                        <li><a href="/sobre" class="footer-link">Sobre Nós</a></li>
+                        <li><a href="/suporte" class="footer-link">Suporte</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3 class="footer-title">Categorias</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link">Colecionáveis</a></li>
+                        <li class="footer-link">Games</a></li>
+                        <li class="footer-link">Acessórios</a></li>
+                        <li class="footer-link">Vestuário</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3 class="footer-title">Redes Sociais</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="copyright">
+                    <i class="far fa-copyright"></i>
+                    2024 NerdHub. Todos os direitos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Efeito de hover nos links do footer
+        document.querySelectorAll('.footer-link').forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.color = '#fff';
+            });
+            
+            link.addEventListener('mouseleave', function() {
+                this.style.color = 'rgba(255, 255, 255, 0.8)';
+            });
+        });
+
+        // Efeito de hover nos ícones sociais
+        document.querySelectorAll('.social-icon').forEach(icon => {
+            icon.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) rotate(5deg)';
+            });
+            
+            icon.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) rotate(0)';
+            });
+        });
+
+        // Data automática de copyright
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyrightElement = document.querySelector('.copyright');
+            const currentYear = new Date().getFullYear();
+            copyrightElement.innerHTML = copyrightElement.innerHTML.replace('2024', currentYear);
+        });
+    </script>
+</body>
+</html>

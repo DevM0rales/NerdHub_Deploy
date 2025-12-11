@@ -104,7 +104,7 @@ body {
     padding: var(--space-xl) 0;
     min-height: 60vh;
     /* Fix for footer conflict - ensure proper spacing */
-    margin-bottom: 100px; /* Adjust this value based on footer height */
+    flex: 1 0 auto;
 }
 
 .support-container {
@@ -751,7 +751,7 @@ body {
     }
     
     .main-content {
-        margin-bottom: 80px; /* Adjust for mobile footer */
+        flex: 1 0 auto;
     }
 }
 

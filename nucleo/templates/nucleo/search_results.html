@@ -1,0 +1,178 @@
+{% extends 'nucleo/base.html' %}
+{% load static %}
+
+{% block title %}Resultados da Busca - NerdHub{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style_index.css' %}">
+<style>
+    .search-results-container {
+        padding: 2rem 1rem;
+        background-color: #ffffff;
+        min-height: 60vh;
+    }
+    
+    .search-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .search-header h1 {
+        font-size: 2rem;
+        color: #333333;
+        margin-bottom: 0.5rem;
+    }
+    
+    .search-header p {
+        color: #666666;
+        font-size: 1.1rem;
+    }
+    
+    .no-results {
+        text-align: center;
+        padding: 3rem;
+        background-color: #f9f9f9;
+        border-radius: 12px;
+        margin-top: 2rem;
+    }
+    
+    .no-results i {
+        font-size: 4rem;
+        color: #cccccc;
+        margin-bottom: 1rem;
+    }
+    
+    .no-results h3 {
+        font-size: 1.5rem;
+        color: #333333;
+        margin-bottom: 1rem;
+    }
+    
+    .no-results p {
+        color: #666666;
+        margin-bottom: 2rem;
+    }
+    
+    .back-to-home {
+        display: inline-block;
+        background-color: #55A143;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+    
+    .back-to-home:hover {
+        background-color: #4C8C3E;
+        transform: translateY(-2px);
+    }
+    
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+        gap: 0.5rem;
+    }
+    
+    .pagination a, .pagination span {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #333333;
+        background-color: #f0f0f0;
+        transition: all 0.3s;
+    }
+    
+    .pagination a:hover {
+        background-color: #55A143;
+        color: white;
+    }
+    
+    .pagination .current {
+        background-color: #55A143;
+        color: white;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="search-results-container">
+    <div class="search-header">
+        <h1>Resultados da Busca</h1>
+        <p>
+            {% if query %}
+                "{{ query }}" - 
+            {% endif %}
+            {{ total_results }} resultado{{ total_results|pluralize:"s" }} encontrado{{ total_results|pluralize:"s" }}
+        </p>
+    </div>
+
+    {% if produtos %}
+        <div class="funko-grid">
+            {% for produto in produtos %}
+            <div class="funko-item">
+                <!-- Link para detalhes do produto -->
+                <a href="{% url 'nucleo:detalhe_produto' produto.id %}">
+                    {% if produto.imagem_principal %}
+                        <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="funko-img">
+                    {% else %}
+                        <div class="funko-img" style="background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-image" style="font-size: 2rem; color: #cccccc;"></i>
+                        </div>
+                    {% endif %}
+                </a>
+                
+                <!-- Nome do produto -->
+                <a href="{% url 'nucleo:detalhe_produto' produto.id %}">
+                    <h3>{{ produto.nome }}</h3>
+                </a>
+                
+                <!-- Preço -->
+                <p class="price">R$ {{ produto.preco }}</p>
+                
+                <!-- Parcelamento -->
+                <p>Em até 12x sem juros</p>
+                
+                <!-- Marca -->
+                {% if produto.marca %}
+                <p style="color: #888888; font-size: 0.9rem; margin-top: 0.5rem;">{{ produto.marca.nome }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if produtos.has_other_pages %}
+        <div class="pagination">
+            {% if produtos.has_previous %}
+                <a href="?q={{ query }}&page={{ produtos.previous_page_number }}">Anterior</a>
+            {% endif %}
+            
+            {% for num in produtos.paginator.page_range %}
+                {% if produtos.number == num %}
+                    <span class="current">{{ num }}</span>
+                {% else %}
+                    <a href="?q={{ query }}&page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if produtos.has_next %}
+                <a href="?q={{ query }}&page={{ produtos.next_page_number }}">Próxima</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    {% else %}
+        <div class="no-results">
+            <i class="fas fa-search"></i>
+            <h3>Nenhum produto encontrado</h3>
+            <p>Não encontramos nenhum produto correspondente à sua busca.</p>
+            <a href="{% url 'nucleo:index' %}" class="back-to-home">
+                Ver todos os produtos
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -55,14 +55,13 @@
                     </h1>
                     
                     <div class="header__search">
-                        <form class="search-form" method="get" action="{% url 'nucleo:buscar_produtos' %}">
+                        <form class="search-form" method="GET" action="{% url 'nucleo:search' %}">
                             <input 
                                 type="search" 
+                                name="q"
                                 class="search-input" 
                                 placeholder="O que você está procurando?" 
                                 aria-label="Buscar produtos"
-                                name="q"
-                                value="{{ request.GET.q|default:'' }}"
                             >
                             <button type="submit" class="search-button" aria-label="Buscar">
                                 <i class="fas fa-search"></i>
@@ -152,50 +151,62 @@
     <!-- ============================================ -->
     <!-- FOOTER - Rodapé do site -->
     <!-- ============================================ -->
-    <footer>
-        <div class="footer-top">
-            <!-- Sobre a empresa -->
-            <div>
-                <h4>Nerd Hub</h4>
-                <p>Sua loja de confiança para produtos de alta qualidade e atendimento excepcional.</p>
-            </div>
-            
-            <!-- Links rápidos -->
-            <div>
-                <h4>Links Rápidos</h4>
-                <ul>
-                    <li><a href="{% url 'nucleo:index' %}">Principal</a></li>
-                    <li><a href="{% url 'nucleo:sobre' %}">Sobre Nós</a></li>
-                    <li><a href="#">Loja</a></li>
-                    <li><a href="{% url 'nucleo:suporte' %}">Suporte</a></li>
-                </ul>
-            </div>
-            
-            <!-- Categorias -->
-            <div>
-                <h4>Categorias</h4>
-                <ul>
-                    <li><a href="#">Colecionáveis</a></li>
-                    <li><a href="#">Games</a></li>
-                    <li><a href="#">Acessórios</a></li>
-                    <li><a href="#">Vestuário</a></li>
-                </ul>
-            </div>
-            
-            <!-- Redes sociais -->
-            <div>
-                <h4>Redes Sociais</h4>
-                <div class="social-icons">
-                    <a href="#">📘</a>
-                    <a href="#">📸</a>
-                    <a href="#">✖️</a>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3 class="footer-title">
+                        <i class="fas fa-gamepad"></i> NerdHub
+                    </h3>
+                    <p class="footer-description">
+                        Sua loja de confiança para produtos de alta qualidade e atendimento excepcional.
+                    </p>
+                </div>
+
+                <div class="footer-column">
+                    <h3 class="footer-title">Links Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'nucleo:index' %}" class="footer-link">Principal</a></li>
+                        <li><a href="{% url 'nucleo:sobre' %}" class="footer-link">Sobre Nós</a></li>
+                        <li><a href="{% url 'nucleo:suporte' %}" class="footer-link">Suporte</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3 class="footer-title">Categorias</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" class="footer-link">Colecionáveis</a></li>
+                        <li><a href="#" class="footer-link">Games</a></li>
+                        <li><a href="#" class="footer-link">Acessórios</a></li>
+                        <li><a href="#" class="footer-link">Vestuário</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3 class="footer-title">Redes Sociais</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Direitos autorais -->
-        <div class="footer-bottom">
-            <p>&copy; 2024 NerdHub. Todos os direitos reservados.</p>
+
+            <div class="footer-bottom">
+                <p class="copyright">
+                    <i class="far fa-copyright"></i>
+                    <span id="current-year">2024</span> NerdHub. Todos os direitos reservados.
+                </p>
+            </div>
         </div>
     </footer>
 
@@ -210,12 +221,7 @@
         if (searchForm) {
             searchForm.addEventListener('submit', function(e) {
                 const searchInput = this.querySelector('.search-input');
-                if (searchInput.value.trim() !== '') {
-                    console.log('Buscando por:', searchInput.value);
-                    // Aqui você pode adicionar a lógica de busca real
-                    // Por enquanto, vamos apenas limpar o campo
-                    searchInput.value = '';
-                } else {
+                if (searchInput.value.trim() === '') {
                     e.preventDefault();
                 }
             });
@@ -235,6 +241,33 @@
                 }
             });
         });
+        
+        // Efeito de hover nos links do footer
+        document.querySelectorAll('.footer-link').forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.color = '#fff';
+            });
+            
+            link.addEventListener('mouseleave', function() {
+                this.style.color = 'rgba(255, 255, 255, 0.8)';
+            });
+        });
+
+        // Efeito de hover nos ícones sociais
+        document.querySelectorAll('.social-icon').forEach(icon => {
+            icon.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) rotate(5deg)';
+            });
+            
+            icon.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) rotate(0)';
+            });
+        });
+
+        // Data automática de copyright
+        const copyrightElement = document.getElementById('current-year');
+        const currentYear = new Date().getFullYear();
+        copyrightElement.textContent = currentYear;
     });
     
     // Função para enviar mensagem no chat de suporte
