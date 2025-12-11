@@ -111,8 +111,6 @@
             <!-- Iterar por todos os produtos -->
             {% for produto in produtos %}
             <div class="funko-item">
-                <!-- Ícone de favorito -->
-                <div class="favorite-icon"></div>
                 
                 <!-- Link para detalhes do produto -->
                 <a href="{% url 'nucleo:detalhe_produto' produto.id %}">
