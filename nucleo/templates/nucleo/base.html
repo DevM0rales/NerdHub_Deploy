@@ -55,12 +55,14 @@
                     </h1>
                     
                     <div class="header__search">
-                        <form class="search-form">
+                        <form class="search-form" method="get" action="{% url 'nucleo:buscar_produtos' %}">
                             <input 
                                 type="search" 
                                 class="search-input" 
                                 placeholder="O que você está procurando?" 
                                 aria-label="Buscar produtos"
+                                name="q"
+                                value="{{ request.GET.q|default:'' }}"
                             >
                             <button type="submit" class="search-button" aria-label="Buscar">
                                 <i class="fas fa-search"></i>

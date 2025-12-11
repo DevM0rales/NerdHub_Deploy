@@ -13,12 +13,15 @@ urlpatterns = [
     path('produto/<int:produto_id>/', views.detalhe_produto, name='detalhe_produto'),
     path('produto/<int:produto_id>/adicionar_carrinho/', views.adicionar_ao_carrinho, name='adicionar_ao_carrinho'),
     path('produto/<int:produto_id>/adicionar_review/', views.adicionar_review, name='adicionar_review'),
-
+    
     path('carrinho/', views.ver_carrinho, name='ver_carrinho'),
     path('carrinho/remover/<int:item_id>/', views.remover_item_carrinho, name='remover_item_carrinho'),
     path('carrinho/alterar_quantidade/<int:item_id>/', views.alterar_quantidade_carrinho, name='alterar_quantidade_carrinho'),
     path('checkout/', views.checkout, name='checkout'),
     path('carrinho/finalizar/', views.finalizar_pedido, name='finalizar_pedido'),
+    
+    # Search functionality
+    path('buscar/', views.buscar_produtos, name='buscar_produtos'),
     
     # Admin - Product Management (mudado de /admin/ para /gerenciar/ para evitar conflito)
     path('gerenciar/produtos/', views.admin_produtos, name='admin_produtos'),

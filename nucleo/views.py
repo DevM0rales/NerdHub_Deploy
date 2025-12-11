@@ -784,3 +784,98 @@ def error_test(request):
             'status': 'error',
             'message': str(e)
         })
+
+
+def buscar_produtos(request):
+    """
+    View para buscar produtos com base em um termo de pesquisa
+    
+    Realiza busca nos campos nome e descrição dos produtos.
+    Também permite filtragem por marca, categoria e faixa de preço.
+    
+    Args:
+        request: HttpRequest object com parâmetros GET:
+            - q: Termo de busca
+            - marca: ID da marca (opcional)
+            - categoria: ID da categoria (opcional)
+            - preco_min: Preço mínimo (opcional)
+            - preco_max: Preço máximo (opcional)
+            - ordenar_por: Campo para ordenação (opcional)
+            
+    Returns:
+        Renderiza template 'nucleo/busca.html' com:
+        - produtos: QuerySet de produtos filtrados
+        - termo_busca: Termo pesquisado
+        - marcas: Todas as marcas para filtros
+        - categorias: Todas as categorias para filtros
+        - filtros_aplicados: Dicionário com filtros ativos
+    """
+    # Obter termo de busca
+    termo_busca = request.GET.get('q', '').strip()
+    
+    # Iniciar queryset com todos os produtos
+    produtos = Produto.objects.all()
+    
+    # Aplicar busca textual se houver termo
+    if termo_busca:
+        produtos = produtos.filter(
+            Q(nome__icontains=termo_busca) | 
+            Q(descricao__icontains=termo_busca)
+        )
+    
+    # Obter filtros
+    marca_id = request.GET.get('marca')
+    categoria_id = request.GET.get('categoria')
+    preco_min = request.GET.get('preco_min')
+    preco_max = request.GET.get('preco_max')
+    ordenar_por = request.GET.get('ordenar_por', 'relevancia')
+    
+    # Aplicar filtros
+    if marca_id:
+        produtos = produtos.filter(marca_id=marca_id)
+    
+    if categoria_id:
+        produtos = produtos.filter(categoria_id=categoria_id)
+    
+    if preco_min:
+        produtos = produtos.filter(preco__gte=preco_min)
+    
+    if preco_max:
+        produtos = produtos.filter(preco__lte=preco_max)
+    
+    # Aplicar ordenação
+    if ordenar_por == 'preco_asc':
+        produtos = produtos.order_by('preco')
+    elif ordenar_por == 'preco_desc':
+        produtos = produtos.order_by('-preco')
+    elif ordenar_por == 'nome':
+        produtos = produtos.order_by('nome')
+    elif ordenar_por == 'mais_recentes':
+        produtos = produtos.order_by('-criado_em')
+    else:
+        # Ordenação padrão por relevância (priorizando produtos com mais reviews)
+        produtos = produtos.annotate(
+            num_reviews=Avg('reviews__nota')
+        ).order_by('-num_reviews', '-criado_em')
+    
+    # Obter todas as marcas e categorias para os filtros
+    marcas = Marca.objects.all()
+    categorias = Categoria.objects.all()
+    
+    # Preparar dados dos filtros aplicados para exibição
+    filtros_aplicados = {
+        'marca': marca_id,
+        'categoria': categoria_id,
+        'preco_min': preco_min,
+        'preco_max': preco_max,
+        'ordenar_por': ordenar_por
+    }
+    
+    return render(request, 'nucleo/busca.html', {
+        'produtos': produtos,
+        'termo_busca': termo_busca,
+        'marcas': marcas,
+        'categorias': categorias,
+        'filtros_aplicados': filtros_aplicados,
+        'total_resultados': produtos.count()
+    })

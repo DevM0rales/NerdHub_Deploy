@@ -75,7 +75,14 @@ class Produto(models.Model):
         related_name='produtos'
     )
     criado_em = models.DateTimeField(auto_now_add=True)
-
+    
+    def media_avaliacoes(self):
+        """Calcula a média das avaliações do produto"""
+        reviews = self.reviews.all()
+        if reviews.exists():
+            return sum(review.nota for review in reviews) / reviews.count()
+        return 0
+    
     def __str__(self):
         return self.nome
     
