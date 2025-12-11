@@ -1,17 +1,4 @@
-<!--
-    DETALHE PRODUTO PAGE - Página de detalhes do produto
-    
-    Exibe informações completas de um produto específico:
-    - Imagens (principal e adicionais)
-    - Nome e descrição
-    - Preço e disponibilidade
-    - Avaliações dos usuários
-    - Produtos relacionados
-    - Formulário para adicionar ao carrinho
--->
-
 {% extends 'nucleo/base.html' %}
-
 
 {% block title %}{{ produto.nome }} - NerdHub{% endblock %}
 
@@ -20,111 +7,464 @@
 
 <!-- Carregar CSS específico da página de detalhe -->
 <link rel="stylesheet" href="{% static 'css/detalhe_produto.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <!-- Container principal do produto -->
 <div class="produto-detalhe-container">
-    <!-- ============================================ -->
-    <!-- ÁREA PRINCIPAL DO PRODUTO -->
-    <!-- ============================================ -->
-    <div class="produto-main">
-        <!-- Galeria de imagens -->
-        <div class="produto-galeria">
-            <!-- Imagem principal -->
-            <img id="imagem-principal" src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}">
-            
-            <!-- Miniaturas das imagens -->
-            <div class="miniaturas">
-                <!-- Imagem principal como miniatura -->
-                <img src="{{ produto.imagem_principal.url }}" onclick="trocarImagem(this)">
-                
-                <!-- Imagens adicionais -->
-                {% for imagem in produto.imagens_adicionais.all %}
-                    <img src="{{ imagem.imagem.url }}" onclick="trocarImagem(this)">
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Informações do produto -->
-        <div class="produto-info">
-            <h2>{{ produto.nome }}</h2>
-            <p class="descricao">{{ produto.descricao }}</p>
-            
-            <!-- Preço -->
-            {% if produto.preco %}
-                <p class="preco">R$ {{ produto.preco }}</p>
-            {% endif %}
-            
-            <!-- Formulário para adicionar ao carrinho -->
-            <form action="{% url 'nucleo:adicionar_ao_carrinho' produto.id %}" method="post">
-                {% csrf_token %}
-                
-                <!-- Botão de compra condicional -->
-                <button type="submit" class="btn-comprar" {% if produto.estoque < 1 %}disabled{% endif %}>
-                    {% if produto.estoque < 1 %}Sem estoque{% else %}Adicionar ao carrinho{% endif %}
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ============================================ -->
-    <!-- AVALIAÇÕES DOS USUÁRIOS -->
-    <!-- ============================================ -->
-    <div class="produto-reviews">
-        <h3>Avaliações</h3>
-        
-        <!-- Listar avaliações existentes -->
-        {% for review in reviews %}
-            <div class="review">
-                <strong>{{ review.usuario.username }}</strong> - ⭐{{ review.nota }} <p>{{ review.texto }}</p>
-            </div>
-        {% empty %}
-            <p>Seja o primeiro a avaliar!</p>
-        {% endfor %}
-
-        <!-- Formulário para adicionar nova avaliação (apenas usuários logados) -->
-        {% if user.is_authenticated %}
-        <form action="{% url 'nucleo:adicionar_review' produto.id %}" method="post">
-            {% csrf_token %}
-            <textarea name="texto" required></textarea>
-            
-            <!-- Seleção de nota (1-5 estrelas) -->
-            <select name="nota">
-                {% for i in "12345" %}
-                <option value="{{ i }}">{{ i }}</option>
-                {% endfor %}
-            </select>
-            
-            <button type="submit">Enviar</button>
-        </form>
-        {% endif %}
-    </div>
-
-    <!-- ============================================ -->
-    <!-- PRODUTOS RELACIONADOS -->
-    <!-- ============================================ -->
-    <div class="produtos-relacionados">
-        <h3>Produtos relacionados</h3>
-        
-        <div class="lista-relacionados">
-            <!-- Listar produtos relacionados -->
-            {% for p in relacionados %}
-                <div class="item-relacionado">
-                    <a href="{% url 'nucleo:detalhe_produto' p.id %}">
-                        <img src="{{ p.imagem_principal.url }}" alt="{{ p.nome }}">
-                        <p>{{ p.nome }}</p>
-                    </a>
+    <!-- SEÇÃO PRINCIPAL: Galeria e Preço lado a lado -->
+    <div class="product-main-section">
+        <!-- Coluna 1: Galeria do Produto -->
+        <section class="product-gallery">
+            <div class="gallery-main">
+                <div class="product-badges">
+                    {% if produto.desconto_percentual %}
+                        <span class="product-badge badge-discount">-{{ produto.desconto_percentual }}% OFF</span>
+                    {% endif %}
+                    {% if produto.novo %}
+                        <span class="product-badge badge-new">NOVO</span>
+                    {% endif %}
+                    {% if produto.mais_vendido %}
+                        <span class="product-badge badge-best-seller">MAIS VENDIDO</span>
+                    {% endif %}
                 </div>
+                <img src="{{ produto.imagem_principal.url }}" 
+                     alt="{{ produto.nome }}" 
+                     class="main-image" 
+                     id="mainImage">
+            </div>
+            
+            <div class="gallery-thumbnails">
+                <div class="thumbnail active" data-image="{{ produto.imagem_principal.url }}">
+                    <img src="{{ produto.imagem_principal.url }}" 
+                         alt="Imagem principal" 
+                         class="thumbnail-image">
+                </div>
+                
+                {% for imagem in produto.imagens_adicionais.all %}
+                    <div class="thumbnail" data-image="{{ imagem.imagem.url }}">
+                        <img src="{{ imagem.imagem.url }}" 
+                             alt="Imagem adicional" 
+                             class="thumbnail-image">
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Coluna 2: Seção de Preços -->
+        <section class="pricing-section">
+            <!-- Informações da Marca -->
+            <div class="brand-info">
+                {% if produto.marca.logo %}
+                    <img src="{{ produto.marca.logo.url }}" alt="{{ produto.marca.nome }}" class="brand-logo">
+                {% endif %}
+                <div class="brand-text">
+                    <div class="brand-name">{{ produto.marca.nome }}</div>
+                    <div class="product-sku">SKU: {{ produto.sku }} | Código: {{ produto.codigo }}</div>
+                </div>
+            </div>
+            
+            <!-- Título do Produto -->
+            <h1 class="product-title">{{ produto.nome }}</h1>
+            <p class="product-subtitle">
+                {{ produto.descricao_curta }}
+            </p>
+            
+            <!-- Avaliação -->
+            <div class="product-rating">
+                <div class="stars">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= produto.avaliacao_media|floatformat:"0"|default:0 %}
+                            <i class="fas fa-star star"></i>
+                        {% elif forloop.counter == produto.avaliacao_media|floatformat:"0"|add:"1" and produto.avaliacao_media|floatformat:"1"|slice:":1" != produto.avaliacao_media|floatformat:"0" %}
+                            <i class="fas fa-star-half-alt star"></i>
+                        {% else %}
+                            <i class="far fa-star star empty"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <span class="rating-value">{{ produto.avaliacao_media|floatformat:"1" }}</span>
+                <span class="rating-count">({{ produto.total_avaliacoes }} avaliações)</span>
+            </div>
+            
+            <!-- Preços -->
+            <div class="price-display">
+                {% if produto.preco_original and produto.preco_original > produto.preco %}
+                    <span class="original-price">R$ {{ produto.preco_original }}</span>
+                {% endif %}
+                <span class="current-price">R$ {{ produto.preco }}</span>
+                {% if produto.desconto_percentual %}
+                    <span class="discount-badge">{{ produto.desconto_percentual }}% OFF</span>
+                {% endif %}
+            </div>
+            
+            <!-- Informações de Pagamento -->
+            <div class="payment-info">
+                <div class="payment-title">Opções de Pagamento</div>
+                <div class="payment-option">
+                    <span class="payment-text">À vista no PIX com</span>
+                    <span class="payment-highlight">7% de desconto</span>
+                </div>
+                <div class="payment-option">
+                    <span class="payment-text">R$ {{ produto.preco }} em até 12x de</span>
+                    <span class="payment-highlight">R$ {{ produto.preco_parcelado }}</span>
+                </div>
+                <a href="#" class="more-options">Ver mais opções de pagamento e parcelamento</a>
+            </div>
+            
+            <!-- Status do Estoque -->
+            <div class="stock-status">
+                <i class="fas fa-check-circle stock-icon"></i>
+                <div>
+                    <div class="stock-text">Disponibilidade: <span class="stock-highlight">{% if produto.estoque > 0 %}Em estoque{% else %}Sem estoque{% endif %}</span></div>
+                    {% if produto.estoque > 0 and produto.estoque < 10 %}
+                        <div class="stock-warning">Últimas {{ produto.estoque }} unidades! Faça seu pedido agora.</div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Botões de Ação -->
+            <div class="action-buttons">
+                <form action="{% url 'nucleo:adicionar_ao_carrinho' produto.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="add-to-cart-btn" {% if produto.estoque < 1 %}disabled{% endif %}>
+                        {% if produto.estoque < 1 %}Sem estoque{% else %}Adicionar ao carrinho{% endif %}
+                    </button>
+                </form>
+                <a href="{% url 'nucleo:ver_carrinho' %}" class="buy-now-btn">
+                    Comprar agora
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- SEÇÃO DE DESCRIÇÃO E AVALIAÇÕES (Abaixo) -->
+    <section class="description-section">
+        <div class="description-header">
+            <h2 class="description-title">DESCRIÇÃO DO PRODUTO</h2>
+            <h2 class="reviews-title">Avaliações dos usuários:</h2>
+        </div>
+        
+        <div class="description-content">
+            <!-- Descrição do Produto -->
+            <div class="description-text">
+                <p>{{ produto.descricao }}</p>
+            </div>
+            
+            <!-- Seção de Avaliações -->
+            <div class="reviews-section">
+                <div class="reviews-grid">
+                    {% for review in reviews %}
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <div class="reviewer-name">{{ review.usuario.username }}</div>
+                                    <div class="review-date">Avaliado em {{ review.data_criacao|date:"d/m/Y" }}</div>
+                                </div>
+                                <div class="review-rating">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= review.nota %}
+                                            <i class="fas fa-star star"></i>
+                                        {% else %}
+                                            <i class="far fa-star star empty"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="review-product">{{ produto.nome }}</div>
+                            <div class="review-text">
+                                {{ review.texto }}
+                            </div>
+                            <div class="review-actions">
+                                <button class="like-btn">
+                                    <i class="fas fa-thumbs-up"></i>
+                                    Útil ({{ review.util|default:0 }})
+                                </button>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p>Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>
+                    {% endfor %}
+                </div>
+                
+                <!-- Formulário para adicionar nova avaliação (apenas usuários logados) -->
+                {% if user.is_authenticated %}
+                <div class="add-review-form">
+                    <h3>Adicionar sua avaliação</h3>
+                    <form action="{% url 'nucleo:adicionar_review' produto.id %}" method="post" class="review-form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="review-text">Sua avaliação:</label>
+                            <textarea id="review-text" name="texto" required placeholder="Compartilhe sua experiência com este produto..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="review-rating">Nota:</label>
+                            <div class="rating-input">
+                                <select id="review-rating" name="nota" required>
+                                    <option value="">Selecione uma nota</option>
+                                    <option value="5">5 estrelas</option>
+                                    <option value="4">4 estrelas</option>
+                                    <option value="3">3 estrelas</option>
+                                    <option value="2">2 estrelas</option>
+                                    <option value="1">1 estrela</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="submit-review-btn">Enviar Avaliação</button>
+                    </form>
+                </div>
+                {% else %}
+                <div class="login-to-review">
+                    <p>Para avaliar este produto, <a href="{% url 'usuario:conta' %}">faça login</a> ou <a href="{% url 'usuario:cadastro' %}">cadastre-se</a>.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Tabs -->
+    <div class="product-tabs">
+        <div class="tabs-header">
+            <button class="tab-btn active" data-tab="specs">Especificações</button>
+            <button class="tab-btn" data-tab="warranty">Garantia</button>
+        </div>
+        
+        <div class="tab-content active" id="specs">
+            <h3>Especificações Técnicas</h3>
+            <table class="specs-table">
+                {% for especificacao in produto.especificacoes.all %}
+                    <tr>
+                        <td>{{ especificacao.chave }}</td>
+                        <td>{{ especificacao.valor }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        
+        <div class="tab-content" id="warranty">
+            <h3>Garantia e Suporte</h3>
+            <p><strong>Garantia do Fabricante:</strong> {{ produto.garantia }} meses contra defeitos de fabricação.</p>
+            <p><strong>Política de Troca:</strong> Aceitamos trocas em até {{ produto.politica_troca }} dias após o recebimento do produto.</p>
+            <p><strong>Suporte Técnico:</strong> Suporte especializado disponível por telefone, e-mail e chat.</p>
+            <p><strong>Central de Serviço:</strong> Temos centros autorizados em todas as capitais brasileiras.</p>
+        </div>
+    </div>
+
+    <!-- Related Products Carousel -->
+    <section class="related-products">
+        <div class="section-header">
+            <h2 class="section-title">Produtos Relacionados</h2>
+            <button class="view-all-btn">Ver todos</button>
+        </div>
+        
+        <div class="products-carousel">
+            {% for p in relacionados %}
+                <article class="product-card">
+                    {% if p.desconto_percentual %}
+                        <div class="product-card-badge">{{ p.desconto_percentual }}% OFF</div>
+                    {% elif p.novo %}
+                        <div class="product-card-badge">NOVO</div>
+                    {% endif %}
+                    <div class="product-card-image">
+                        <a href="{% url 'nucleo:detalhe_produto' p.id %}">
+                            <img src="{{ p.imagem_principal.url }}" alt="{{ p.nome }}">
+                        </a>
+                    </div>
+                    <h3 class="product-card-title">{{ p.nome }}</h3>
+                    <div class="product-card-price">R$ {{ p.preco }}</div>
+                </article>
             {% empty %}
                 <p>Sem produtos relacionados</p>
             {% endfor %}
         </div>
-    </div>
+    </section>
 </div>
 
-<!-- Script para trocar imagem principal ao clicar nas miniaturas -->
+<!-- Script para funcionalidades da página -->
 <script>
-function trocarImagem(elem) {
-    document.getElementById('imagem-principal').src = elem.src;
+// Product Gallery Thumbnails
+document.addEventListener('DOMContentLoaded', function() {
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const mainImage = document.getElementById('mainImage');
+    
+    if (thumbnails.length > 0 && mainImage) {
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', function() {
+                // Remove active class from all thumbnails
+                thumbnails.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked thumbnail
+                this.classList.add('active');
+                
+                // Change main image
+                const newImage = this.getAttribute('data-image');
+                mainImage.src = newImage;
+                
+                // Add fade effect
+                mainImage.style.opacity = '0';
+                setTimeout(() => {
+                    mainImage.style.opacity = '1';
+                }, 200);
+            });
+        });
+    }
+    
+    // Product Tabs
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            
+            // Remove active class from all buttons and contents
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding content
+            this.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+    
+    // Add to Cart Button Feedback
+    const addToCartForms = document.querySelectorAll('form[action*="adicionar_ao_carrinho"]');
+    addToCartForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const button = this.querySelector('.add-to-cart-btn');
+            if (button && !button.disabled) {
+                // Button feedback
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Adicionado';
+                button.style.backgroundColor = 'var(--dark-green)';
+                
+                // Show notification
+                showNotification('{{ produto.nome }} adicionado ao carrinho!');
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }
+        });
+    });
+    
+    // Like buttons in reviews
+    const likeButtons = document.querySelectorAll('.like-btn');
+    likeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const countSpan = this.querySelector('.like-count') || this;
+            let currentText = countSpan.textContent;
+            let countMatch = currentText.match(/\((\d+)\)/);
+            let count = countMatch ? parseInt(countMatch[1]) : 0;
+            
+            // Update count
+            countSpan.innerHTML = `<i class="fas fa-thumbs-up"></i> Útil (${count + 1})`;
+            
+            // Button feedback
+            this.style.backgroundColor = 'var(--primary-green)';
+            this.style.color = 'var(--white)';
+            
+            setTimeout(() => {
+                this.style.backgroundColor = '';
+                this.style.color = '';
+            }, 500);
+        });
+    });
+    
+    // View All Button in Related Products
+    const viewAllBtn = document.querySelector('.view-all-btn');
+    if (viewAllBtn) {
+        viewAllBtn.addEventListener('click', () => {
+            viewAllBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
+            
+            setTimeout(() => {
+                showNotification('Carregando mais produtos relacionados...');
+                viewAllBtn.innerHTML = 'Ver todos';
+            }, 1500);
+        });
+    }
+    
+    // Initialize specs tab as active
+    const defaultTab = document.querySelector('[data-tab="specs"]');
+    if (defaultTab) {
+        defaultTab.click();
+    }
+});
+
+// Notification System
+function showNotification(message) {
+    // Remove existing notification if any
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas fa-check-circle"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    // Add styles for notification
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--primary-green);
+        color: white;
+        padding: var(--space-md) var(--space-lg);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        z-index: 1000;
+        animation: slideIn 0.3s ease-out, slideOut 0.3s ease-in 2.7s forwards;
+        max-width: 400px;
+    `;
+    
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Add notification to body
+    document.body.appendChild(notification);
+    
+    // Remove notification after 3 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+        if (style.parentNode) {
+            style.remove();
+        }
+    }, 3000);
 }
 </script>
 
