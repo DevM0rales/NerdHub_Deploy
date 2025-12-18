@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Produto, Categoria, Marca, Carrinho, ItemCarrinho, Pedido, Review
+from .models import Produto, Categoria, Marca, Carrinho, ItemCarrinho, Pedido, Review, ItemPedido
 from usuarios.models import Endereco
 import json
 from django.views.decorators.http import require_POST, require_GET, require_http_methods
